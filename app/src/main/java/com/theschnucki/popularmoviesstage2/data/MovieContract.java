@@ -12,14 +12,14 @@ public class MovieContract {
 
     public static final String PATH_MOVIES = "favoriteMovies";
 
-    //Movie table and column names
-    public static final String TABLE_NAME = "favoriteMovies";
-
     //MovieEntry is an inner class that defines the contens of the Movie table
     public static final class MovieEntry implements BaseColumns {
 
         //MovieEntry content Uri = base content Uri + path
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIES).build();
+
+        //Movie table and column names
+        public static final String TABLE_NAME = "favoriteMovies";
 
         //"_ID" column is automatically created
         public static final String COLUMN_TITLE = "title";
