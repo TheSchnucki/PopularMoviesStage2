@@ -1,13 +1,25 @@
 package com.theschnucki.popularmoviesstage2.data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 public class MovieContract {
 
+    // Authority should be the same as in teh android manifest
+    public static final String AUTHORITY ="com.theschnucki.popularmovies";
+
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+
+    public static final String PATH_MOVIES = "favoriteMovies";
+
+    //Movie table and column names
+    public static final String TABLE_NAME = "favoriteMovies";
+
+    //MovieEntry is an inner class that defines the contens of the Movie table
     public static final class MovieEntry implements BaseColumns {
 
-        //Movie table and column names
-        public static final String TABLE_NAME = "Movies";
+        //MovieEntry content Uri = base content Uri + path
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_MOVIES).build();
 
         //"_ID" column is automatically created
         public static final String COLUMN_TITLE = "title";
