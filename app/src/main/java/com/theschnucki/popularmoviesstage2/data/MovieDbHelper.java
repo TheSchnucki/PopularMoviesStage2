@@ -32,8 +32,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                                     MovieEntry.COLUMN_OVERVIEW + "TEXT, " +
                                     MovieEntry.COLUMN_FAVORITE + "TEXT);";
 
-        //TODO write DB
-        //db.execSQL(CREATE_TABLE);
+         db.execSQL(CREATE_TABLE);
     }
 
 
