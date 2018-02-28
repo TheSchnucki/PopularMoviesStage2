@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mErrorMessageDisplay = (TextView) findViewById(R.id.error_message_tv);
 
         //GridLayoutManager supports different number of columns
-        int numberOfColumns = 2;
+        int numberOfColumns = calculateNumberOfColumns(this);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
 
         // MovieAdapter is responsible for linking the Movie data to the Views that will be displayed
@@ -143,6 +144,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         if (id == R.id.rate_sort) sortOrder = "top_rated";
         loadMovieData();
         return true;
+    }
+
+    // this should calculate the number of rows in the main grid view
+    private int calculateNumberOfColumns (Context context) {
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+        int scalingFactor = 180; //see JsonUtils for resolution of downloaded image
+        int noOfColumns = (int) (dpWidth/scalingFactor);
+        return noOfColumns;
     }
 
 }

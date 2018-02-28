@@ -65,8 +65,6 @@ public class JsonUtils {
 
             JSONObject singleMovie = movieArray.getJSONObject(i);
 
-
-
             movie.setTitle(singleMovie.getString(MOVIE_TITLE));
 
             movie.setReleaseDate(singleMovie.getString(RELEASE_DATE));
