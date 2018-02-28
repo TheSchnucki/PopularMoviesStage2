@@ -68,7 +68,7 @@ public class JsonUtils {
 
 
             movie.setTitle(singleMovie.getString(MOVIE_TITLE));
-            //TODO come up with a proper date format
+
             movie.setReleaseDate(singleMovie.getString(RELEASE_DATE));
 
             // posterPath is special because the JSON data ony delivers the suffix

@@ -63,6 +63,8 @@
 
         </LinearLayout>
 
+        <!--TODO Add two buttons, one for trailers one for reviews-->
+
         <TextView
             android:id="@+id/overview_label_Tv"
             android:layout_width="wrap_content"

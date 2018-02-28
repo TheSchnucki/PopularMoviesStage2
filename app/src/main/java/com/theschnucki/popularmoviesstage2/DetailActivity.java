@@ -15,7 +15,7 @@ public class DetailActivity extends AppCompatActivity {
     public  static final String TAG = DetailActivity.class.getSimpleName();
 
     public Movie movie = null;
-    //TODO polish the detail view
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

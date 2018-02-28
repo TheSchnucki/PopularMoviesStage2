@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public void onClick(Movie movie) {
         Context context = this;
 
-        //TODO implement Intend for detail view
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("movie_parcel", movie);
         startActivity(intent);
