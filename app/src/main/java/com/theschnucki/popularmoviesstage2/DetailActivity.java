@@ -66,4 +66,6 @@ public class DetailActivity extends AppCompatActivity {
         FloatingActionButton fovoriteChangeFlb = findViewById(R.id.favorite_fab);
 
     }
+
+    //Todo add function to display floating action button representing the sate of favoriteness
 }
