@@ -24,6 +24,7 @@ public class JsonUtils {
         final String MOVIE_LIST = "results";          //movies list
 
         final String MOVIE_TITLE = "title";           //Title
+        final String IMDB_ID = "id";                  //ID
         final String RELEASE_DATE = "release_date";   //releaseDate
         final String POSTER_PATH = "poster_path";     //Poster
         final String VOTE_AVERAGE = "vote_average";   //VoteAverage
@@ -66,6 +67,8 @@ public class JsonUtils {
             JSONObject singleMovie = movieArray.getJSONObject(i);
 
             movie.setTitle(singleMovie.getString(MOVIE_TITLE));
+
+            movie.setIMDbId(singleMovie.getInt(IMDB_ID));
 
             movie.setReleaseDate(singleMovie.getString(RELEASE_DATE));
 

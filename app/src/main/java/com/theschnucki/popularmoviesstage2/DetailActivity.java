@@ -2,8 +2,11 @@ package com.theschnucki.popularmoviesstage2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,7 +15,7 @@ import com.theschnucki.popularmoviesstage2.model.Movie;
 
 public class DetailActivity extends AppCompatActivity {
 
-    public  static final String TAG = DetailActivity.class.getSimpleName();
+    public static final String TAG = DetailActivity.class.getSimpleName();
 
     public Movie movie = null;
 
@@ -54,5 +57,13 @@ public class DetailActivity extends AppCompatActivity {
         releaseDateTv.setText(movie.getReleaseDate());
         voteAverageTv.setText(movie.getVoteAverage());
         overviewTv.setText(movie.getOverview());
+    }
+
+    //wired to a button on the UI to change the status of favorite or not
+    public void onClickChangeFavorite (View view){
+        //todo write movie to database if not in remove if in
+        //todo  change appearance of the icon
+        FloatingActionButton fovoriteChangeFlb = findViewById(R.id.favorite_fab);
+
     }
 }
