@@ -63,7 +63,18 @@ public class DetailActivity extends AppCompatActivity {
     public void onClickChangeFavorite (View view){
         //todo write movie to database if not in remove if in
         //todo  change appearance of the icon
-        FloatingActionButton fovoriteChangeFlb = findViewById(R.id.favorite_fab);
+
+        FloatingActionButton favoriteChangeFlb = findViewById(R.id.favorite_fab);
+
+        if (!movie.getIsFavorite()){
+            favoriteChangeFlb.setImageResource(R.drawable.ic_favorite);
+            movie.setIsFavorite(true);
+            Log.v(TAG, "Favorite = " + movie.getIsFavorite());
+        } else {
+            favoriteChangeFlb.setImageResource(R.drawable.ic_favorite_border);
+            movie.setIsFavorite(false);
+            Log.v(TAG, "Favorite = " + movie.getIsFavorite());
+        }
 
     }
 

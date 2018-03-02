@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra("movie_parcel", movie);
         startActivity(intent);
+        //TODO get the information if movie is set favorite
     }
 
     //This method will make the MovieGrid visible and hide the error message

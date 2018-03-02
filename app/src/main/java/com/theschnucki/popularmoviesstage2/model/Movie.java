@@ -13,6 +13,7 @@ public class Movie implements Parcelable {
     private String posterPath;
     private String voteAverage;
     private String overview;
+    private boolean isFavorite;
 
     public String getTitle() {
         return title;
@@ -62,6 +63,10 @@ public class Movie implements Parcelable {
         this.overview = overview;
     }
 
+    public boolean getIsFavorite () {return isFavorite;};
+
+    public void setIsFavorite (boolean isFavorite) {this.isFavorite = isFavorite;};
+
     @Override
     public int describeContents() {
         return 0;
@@ -75,6 +80,7 @@ public class Movie implements Parcelable {
         dest.writeString(this.posterPath);
         dest.writeString(this.voteAverage);
         dest.writeString(this.overview);
+        dest.writeByte((byte) (isFavorite ? 1 : 0));  //if isFavorite == true, byte == 1
     }
 
     public Movie() {
@@ -87,6 +93,7 @@ public class Movie implements Parcelable {
         this.posterPath = in.readString();
         this.voteAverage = in.readString();
         this.overview = in.readString();
+        this.isFavorite = in.readByte()!= 0;  //isFavorite == true if byte != 0
     }
 
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
