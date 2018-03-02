@@ -12,12 +12,14 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.theschnucki.popularmoviesstage2.data.MovieContract;
 import com.theschnucki.popularmoviesstage2.model.Movie;
 import com.theschnucki.popularmoviesstage2.utilities.JsonUtils;
 import com.theschnucki.popularmoviesstage2.utilities.NetworkUtils;
@@ -137,7 +139,43 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
 
-    //TODO Create new async task to load list of favorites
+    public class FetchFavoriteMoviesTask extends AsyncTask<String, Void, List<Movie>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mLoadingIndicator.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected List<Movie> doInBackground(String... strings) {
+            try {
+                getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                        null,
+                        null,
+                        null,
+                        null);
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to asynchronously load Favorite Movies Data.");
+                e.printStackTrace();
+                return null;
+            }
+            // TODO if Getting a Cursor convert it to Movie List OR rewrite to give the cursor to a function that does that
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<Movie> loadFavoriteMovieList) {
+            mLoadingIndicator.setVisibility(View.INVISIBLE);
+            if (loadFavoriteMovieList != null) {
+                showMovieDataView();
+                mMovieAdapter.setMovieList(loadFavoriteMovieList);
+            } else {
+                showErrorMessage();
+            }
+        }
+    }
+
 
     //Get sort menu put into Action Bar
     public boolean onCreateOptionsMenu(Menu menu) {
