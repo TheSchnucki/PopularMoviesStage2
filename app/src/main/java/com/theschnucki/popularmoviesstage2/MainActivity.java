@@ -25,15 +25,11 @@ import com.theschnucki.popularmoviesstage2.utilities.NetworkUtils;
 import java.net.URL;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
-        implements MovieAdapter.MovieAdapterOnClickHandler, LoaderManager.LoaderCallbacks<Cursor>{
+public class MainActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterOnClickHandler{
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final String API_KEY = BuildConfig.API_KEY;
-
-    // TODO unify the async/loader tasks
-    private static final int Movie_Loader_ID = 0;
 
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
@@ -140,45 +136,8 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public Loader<Cursor> onCreateLoader(int id, final Bundle loaderArgs) {
-        return new AsyncTaskLoader<Cursor>(this) {
 
-            Cursor mMovieData = null;
-
-            @Override
-            protected void onStartLoading() {
-                if (mMovieData != null) {
-                    deliverResult(mMovieData);
-                } else {
-                    forceLoad(); //force new load
-                }
-            }
-
-            @Override
-            public Cursor loadInBackground() {
-                //TODO implement load in Background to load data
-
-                return null;
-            }
-
-            public void deliverResult(Cursor data) {
-                mMovieData = data;
-                super.deliverResult(data);
-            }
-        };
-    }
-
-    //Called when previously created loader has finished loading
-    public void onLoadFinished(Loader<Cursor>loader, Cursor data) {
-
-    }
-
-    //Called when previously created loader is reset
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
-
+    //TODO Create new async task to load list of favorites
 
     //Get sort menu put into Action Bar
     public boolean onCreateOptionsMenu(Menu menu) {
