@@ -41,10 +41,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*
-        *Using findViewById to get a reference to the grid RecyclerView
-        *allows to set adapter and toggle visibility
-        */
+        //Using findViewById to get a reference to the grid RecyclerView allows to set adapter and toggle visibility
+
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_rv);
 
         mErrorMessageDisplay = (TextView) findViewById(R.id.error_message_tv);
@@ -141,9 +139,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public boolean onOptionsItemSelected (MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.pop_sort)  sortOrder = "popular";
-        if (id == R.id.rate_sort) sortOrder = "top_rated";
-        loadMovieData();
+        if (id == R.id.pop_sort){
+            sortOrder = "popular";
+            loadMovieData();
+        }
+        if (id == R.id.rate_sort) {
+            sortOrder = "top_rated";
+            loadMovieData();
+        }
+
         return true;
     }
 
