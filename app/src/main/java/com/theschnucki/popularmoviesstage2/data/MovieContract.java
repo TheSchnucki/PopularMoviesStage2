@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
 public class MovieContract {
 
     // Authority should be the same as in teh android manifest
-    public static final String AUTHORITY ="com.theschnucki.popularmovies";
+    public static final String AUTHORITY ="com.theschnucki.popularmoviesstage2";
 
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
@@ -23,10 +23,10 @@ public class MovieContract {
 
         //"_ID" column is automatically created
         public static final String COLUMN_TITLE = "title";
-        public static final String COLUMN_TMDB_ID = "TMDb id";
-        public static final String COLUMN_RELEASE_DATE = "release date";
-        public static final String COLUMN_POSTER_PATH = "poster path";
-        public static final String COLUMN_VOTE_AVERAGE = "vote average";
+        public static final String COLUMN_TMDB_ID = "TMDb_id";
+        public static final String COLUMN_RELEASE_DATE = "release_date";
+        public static final String COLUMN_POSTER_PATH = "poster_path";
+        public static final String COLUMN_VOTE_AVERAGE = "vote_average";
         public static final String COLUMN_OVERVIEW = "overview";
         public static final String COLUMN_FAVORITE = "favorite";
     }

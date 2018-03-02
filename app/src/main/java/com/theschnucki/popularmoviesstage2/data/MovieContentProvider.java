@@ -58,7 +58,8 @@ public class MovieContentProvider extends ContentProvider {
 
         final SQLiteDatabase db = mMovieDbHelper.getReadableDatabase();
 
-        int match = sUriMatcher.match(uri);
+        int match = sUriMatcher.match(uri); //distinguish what task is asked for
+
         Uri returnUri; //URI to be returned
 
         switch (match) {

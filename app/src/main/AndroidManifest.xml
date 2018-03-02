@@ -28,7 +28,7 @@
         </activity>
 
         <provider
-            android:authorities="com.theschnucki.popularmovies"
+            android:authorities="com.theschnucki.popularmoviesstage2"
             android:name="com.theschnucki.popularmoviesstage2.data.MovieContentProvider"
             android:exported="false"/>
 

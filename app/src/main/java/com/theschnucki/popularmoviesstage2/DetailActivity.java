@@ -1,6 +1,8 @@
 package com.theschnucki.popularmoviesstage2;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.theschnucki.popularmoviesstage2.data.MovieContract;
 import com.theschnucki.popularmoviesstage2.model.Movie;
 
 public class DetailActivity extends AppCompatActivity {
@@ -70,6 +73,7 @@ public class DetailActivity extends AppCompatActivity {
             favoriteChangeFlb.setImageResource(R.drawable.ic_favorite);
             movie.setIsFavorite(true);
             Log.v(TAG, "Favorite = " + movie.getIsFavorite());
+            addMovieToFavorites();
         } else {
             favoriteChangeFlb.setImageResource(R.drawable.ic_favorite_border);
             movie.setIsFavorite(false);
@@ -78,5 +82,22 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
+    public void addMovieToFavorites () {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(MovieContract.MovieEntry.COLUMN_TITLE, movie.getTitle());
+        contentValues.put(MovieContract.MovieEntry.COLUMN_TMDB_ID, movie.getIMDbId());
+
+        //TODO check if Movie is already in Favorites??
+
+        //insert Movie via Content resolver
+        Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
+
+        //TODO remove this log entry
+        if (uri != null) {
+            Log.v(TAG, "Movie entry successful");
+        }
+
+    }
     //Todo add function to display floating action button representing the sate of favoriteness
 }
