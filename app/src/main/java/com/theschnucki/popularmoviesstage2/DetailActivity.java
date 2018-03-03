@@ -1,11 +1,15 @@
 package com.theschnucki.popularmoviesstage2;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -21,6 +25,8 @@ public class DetailActivity extends AppCompatActivity {
     public static final String TAG = DetailActivity.class.getSimpleName();
 
     public Movie movie = null;
+
+    private Cursor favoriteMovieIdCursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +89,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void addMovieToFavorites () {
+
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(MovieContract.MovieEntry.COLUMN_TITLE, movie.getTitle());

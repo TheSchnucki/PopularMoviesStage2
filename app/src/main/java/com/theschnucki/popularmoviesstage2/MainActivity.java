@@ -24,6 +24,7 @@ import com.theschnucki.popularmoviesstage2.data.MovieContract;
 import com.theschnucki.popularmoviesstage2.model.Movie;
 import com.theschnucki.popularmoviesstage2.utilities.JsonUtils;
 import com.theschnucki.popularmoviesstage2.utilities.NetworkUtils;
+import com.theschnucki.popularmoviesstage2.utilities.Utils;
 
 import java.net.URL;
 import java.util.List;
@@ -155,7 +156,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
 
         @Override
-        protected Cursor doInBackground(String... strings) {
+        protected Cursor doInBackground(String... params) {
+
             try {
                 return getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
                         null,
@@ -174,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (loadFavoriteMovieCursor != null) {
                 showMovieDataView();
-                List<Movie> loadFavoriteMovieList = JsonUtils.cursorToMovieList(loadFavoriteMovieCursor);
+                List<Movie> loadFavoriteMovieList = Utils.cursorToMovieList(loadFavoriteMovieCursor);
                 mMovieAdapter.setMovieList(loadFavoriteMovieList);
             } else {
                 showErrorMessage();
