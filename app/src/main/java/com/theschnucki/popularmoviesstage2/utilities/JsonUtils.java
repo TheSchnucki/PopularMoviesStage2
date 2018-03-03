@@ -97,13 +97,11 @@ public class JsonUtils {
             Movie movie = new Movie();
 
             movie.setTitle(movieCursor.getString(movieCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_TITLE)));
-            Log.v(TAG, "cursorToMovieList " + movie.getTitle() + " is the title");
             movie.setTMDbId(movieCursor.getInt(movieCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_TMDB_ID)));
             movie.setReleaseDate(movieCursor.getString(movieCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_RELEASE_DATE)));
             movie.setPosterPath(movieCursor.getString(movieCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_POSTER_PATH)));
             movie.setVoteAverage(movieCursor.getString(movieCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE)));
             movie.setOverview(movieCursor.getString(movieCursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_OVERVIEW)));
-            Log.v(TAG, "cursorToMovieList " + movie.getOverview() + " is the overview");
 
             movieList.add(movie);
 
