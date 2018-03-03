@@ -10,4 +10,8 @@
     <string name="detail_vote_average_label">Average Vote</string>
     <string name="detail_overview_label">Overview</string>
     <string name="poster_of_the_movie_cd">poster of the movie</string>
+
+    <string name="sort_order_popular">popular</string>
+    <string name="sort_order_top_rated">top_rated</string>
+    <string name="sort_order_favorites">favorites</string>
 </resources>

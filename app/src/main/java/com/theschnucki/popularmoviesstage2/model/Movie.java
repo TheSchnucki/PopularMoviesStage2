@@ -8,7 +8,7 @@ public class Movie implements Parcelable {
     public static final String TAG = Movie.class.getSimpleName();
 
     private String title;
-    private int IMDbId;
+    private int TMDbId;
     private String releaseDate;
     private String posterPath;
     private String voteAverage;
@@ -23,12 +23,12 @@ public class Movie implements Parcelable {
         this.title = title;
     }
 
-    public int getIMDbId() {
-        return IMDbId;
+    public int getTMDbId() {
+        return TMDbId;
     }
 
-    public void setIMDbId(int IMDbId) {
-        this.IMDbId = IMDbId;
+    public void setTMDbId(int IMDbId) {
+        this.TMDbId = IMDbId;
     }
 
     public String getReleaseDate() {
@@ -75,7 +75,7 @@ public class Movie implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.title);
-        dest.writeInt(this.IMDbId);
+        dest.writeInt(this.TMDbId);
         dest.writeString(this.releaseDate);
         dest.writeString(this.posterPath);
         dest.writeString(this.voteAverage);
@@ -88,7 +88,7 @@ public class Movie implements Parcelable {
 
     protected Movie(Parcel in) {
         this.title = in.readString();
-        this.IMDbId = in.readInt();
+        this.TMDbId = in.readInt();
         this.releaseDate = in.readString();
         this.posterPath = in.readString();
         this.voteAverage = in.readString();

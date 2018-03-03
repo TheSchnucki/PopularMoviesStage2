@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ZoomControls;
 
 import com.theschnucki.popularmoviesstage2.data.MovieContract;
 import com.theschnucki.popularmoviesstage2.model.Movie;
@@ -72,7 +73,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private void loadMovieData() {
         showMovieDataView();
-        new FetchMoviesTask().execute(sortOrder);
+        if (sortOrder == getString(R.string.sort_order_favorites)){
+            new FetchFavoriteMoviesTask().execute();
+        }
+        else {
+            new FetchMoviesTask().execute(sortOrder);
+        }
+
     }
 
     @Override
@@ -139,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     }
 
 
-    public class FetchFavoriteMoviesTask extends AsyncTask<String, Void, List<Movie>> {
+    public class FetchFavoriteMoviesTask extends AsyncTask<String, Void, Cursor> {
 
         @Override
         protected void onPreExecute() {
@@ -148,9 +155,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         }
 
         @Override
-        protected List<Movie> doInBackground(String... strings) {
+        protected Cursor doInBackground(String... strings) {
             try {
-                getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                return getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
                         null,
                         null,
                         null,
@@ -160,15 +167,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 e.printStackTrace();
                 return null;
             }
-            // TODO if Getting a Cursor convert it to Movie List OR rewrite to give the cursor to a function that does that
-            return null;
         }
 
         @Override
-        protected void onPostExecute(List<Movie> loadFavoriteMovieList) {
+        protected void onPostExecute(Cursor loadFavoriteMovieCursor) {
             mLoadingIndicator.setVisibility(View.INVISIBLE);
-            if (loadFavoriteMovieList != null) {
+            if (loadFavoriteMovieCursor != null) {
                 showMovieDataView();
+                List<Movie> loadFavoriteMovieList = JsonUtils.cursorToMovieList(loadFavoriteMovieCursor);
                 mMovieAdapter.setMovieList(loadFavoriteMovieList);
             } else {
                 showErrorMessage();
@@ -187,14 +193,21 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public boolean onOptionsItemSelected (MenuItem item) {
         int id = item.getItemId();
 
+        //TODO check those IFs for improvements
+
         if (id == R.id.pop_sort){
-            sortOrder = "popular";
+            sortOrder = getString(R.string.sort_order_popular);
             loadMovieData();
         }
         if (id == R.id.rate_sort) {
-            sortOrder = "top_rated";
+            sortOrder = getString(R.string.sort_order_top_rated);
             loadMovieData();
         }
+        if (id == R.id.fav_sort) {
+            sortOrder = getString(R.string.sort_order_favorites);
+            loadMovieData();
+        }
+
 
         return true;
     }

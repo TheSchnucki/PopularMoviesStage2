@@ -86,7 +86,11 @@ public class DetailActivity extends AppCompatActivity {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(MovieContract.MovieEntry.COLUMN_TITLE, movie.getTitle());
-        contentValues.put(MovieContract.MovieEntry.COLUMN_TMDB_ID, movie.getIMDbId());
+        contentValues.put(MovieContract.MovieEntry.COLUMN_TMDB_ID, movie.getTMDbId());
+        contentValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
+        contentValues.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+        contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE, movie.getVoteAverage());
+        contentValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
 
         //TODO check if Movie is already in Favorites??
 
