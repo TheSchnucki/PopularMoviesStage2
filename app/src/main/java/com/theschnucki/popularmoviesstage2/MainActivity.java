@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         setContentView(R.layout.activity_main);
 
         //Using findViewById to get a reference to the grid RecyclerView allows to set adapter and toggle visibility
+        setupSharedPreferences();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.grid_rv);
 
@@ -72,14 +73,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         //Once all of the views are set up, load Movie data
         loadMovieData();
-
-        setupSharedPreferences();
     }
 
     private void setupSharedPreferences () {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String prefSortOrder = sharedPreferences.getString("sortOrder", "");
-        if (prefSortOrder == null) prefSortOrder = "popular";
+        Log.v(TAG, "Fetched preferences: " + prefSortOrder);
+        if (prefSortOrder == "") prefSortOrder = "popular";
         sortOrder = prefSortOrder;
     }
 
@@ -227,6 +227,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
         sharedPreferencesEditor.putString("sortOrder", sortOrder);
         sharedPreferencesEditor.apply();
+
+        Log.v(TAG ,"applied sharedPreferences: " + sortOrder);
 
         return true;
     }
