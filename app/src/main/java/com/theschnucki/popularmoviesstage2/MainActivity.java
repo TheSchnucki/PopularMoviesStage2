@@ -5,8 +5,10 @@ import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -70,6 +72,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         //Once all of the views are set up, load Movie data
         loadMovieData();
+
+        setupSharedPreferences();
+    }
+
+    private void setupSharedPreferences () {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String prefSortOrder = sharedPreferences.getString("sortOrder", "");
+        if (prefSortOrder == null) prefSortOrder = "popular";
+        sortOrder = prefSortOrder;
     }
 
     private void loadMovieData() {
@@ -211,6 +222,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             loadMovieData();
         }
 
+        //put sort order into shared Preferences
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor sharedPreferencesEditor = sharedPreferences.edit();
+        sharedPreferencesEditor.putString("sortOrder", sortOrder);
+        sharedPreferencesEditor.apply();
 
         return true;
     }
