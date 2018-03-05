@@ -26,8 +26,6 @@ public class DetailActivity extends AppCompatActivity {
 
     public Movie movie = null;
 
-    private Cursor favoriteMovieIdCursor;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +64,13 @@ public class DetailActivity extends AppCompatActivity {
         releaseDateTv.setText(movie.getReleaseDate());
         voteAverageTv.setText(movie.getVoteAverage());
         overviewTv.setText(movie.getOverview());
+
+        FloatingActionButton favoriteChangeFlb = findViewById(R.id.favorite_fab);
+
+        if (checkIfIsFavorite() != 0){
+            favoriteChangeFlb.setImageResource(R.drawable.ic_favorite);
+            movie.setIsFavorite(true);
+        }
     }
 
     //wired to a button on the UI to change the status of favorite or not
