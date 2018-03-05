@@ -88,27 +88,46 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    public void addMovieToFavorites () {
-
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(MovieContract.MovieEntry.COLUMN_TITLE, movie.getTitle());
-        contentValues.put(MovieContract.MovieEntry.COLUMN_TMDB_ID, movie.getTMDbId());
-        contentValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
-        contentValues.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
-        contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE, movie.getVoteAverage());
-        contentValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
+    public int checkIfIsFavorite () {
 
         //TODO check if Movie is already in Favorites??
+        String stringTBDbId = Integer.toString(movie.getTMDbId());
+        Uri uri = MovieContract.MovieEntry.CONTENT_URI;
+        uri = uri.buildUpon().appendPath(stringTBDbId).build();
 
-        //insert Movie via Content resolver
-        Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
+        Cursor testCursor = getContentResolver().query(uri,
+                null,
+                null,
+                null,
+                null);
+        Log.v(TAG, "Cursor length = " + testCursor.getCount());
 
-        //TODO remove this log entry
-        if (uri != null) {
-            Log.v(TAG, "Movie entry successful");
+        return testCursor.getCount();
+    }
+
+    public void addMovieToFavorites () {
+
+        if (checkIfIsFavorite() == 0) {
+
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(MovieContract.MovieEntry.COLUMN_TITLE, movie.getTitle());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_TMDB_ID, movie.getTMDbId());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE, movie.getVoteAverage());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
+
+            //insert Movie via Content resolver
+            Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
+
+            //TODO remove this log entry
+            if (uri != null) {
+                Log.v(TAG, "Movie entry successful");
+            }
+        } else {
+            Log.v(TAG, "Movie already in Favorites");
         }
-
     }
     //Todo add function to display floating action button representing the sate of favoriteness
 }
