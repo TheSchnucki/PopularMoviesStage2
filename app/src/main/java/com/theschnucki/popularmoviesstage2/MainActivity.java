@@ -54,9 +54,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         //Using findViewById to get a reference to the grid RecyclerView allows to set adapter and toggle visibility
         setupSharedPreferences();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.grid_rv);
+        mRecyclerView = findViewById(R.id.grid_rv);
 
-        mErrorMessageDisplay = (TextView) findViewById(R.id.error_message_tv);
+        mErrorMessageDisplay = findViewById(R.id.error_message_tv);
 
         //GridLayoutManager supports different number of columns
         int numberOfColumns = calculateNumberOfColumns(this);
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mRecyclerView.setAdapter(mMovieAdapter);
 
         //Progress bar indicates that Data is loading
-        mLoadingIndicator = (ProgressBar) findViewById(R.id.loading_indicator_pb);
+        mLoadingIndicator = findViewById(R.id.loading_indicator_pb);
 
         //Once all of the views are set up, load Movie data
         loadMovieData();

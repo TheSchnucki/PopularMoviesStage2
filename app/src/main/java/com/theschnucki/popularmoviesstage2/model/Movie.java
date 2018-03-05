@@ -63,9 +63,9 @@ public class Movie implements Parcelable {
         this.overview = overview;
     }
 
-    public boolean getIsFavorite () {return isFavorite;};
+    public boolean getIsFavorite () {return isFavorite;}
 
-    public void setIsFavorite (boolean isFavorite) {this.isFavorite = isFavorite;};
+    public void setIsFavorite (boolean isFavorite) {this.isFavorite = isFavorite;}
 
     @Override
     public int describeContents() {

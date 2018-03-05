@@ -41,7 +41,7 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         //getting the extra from the starting activity
-        movie = (Movie) intent.getParcelableExtra("movie_parcel");
+        movie = intent.getParcelableExtra("movie_parcel");
         if (movie == null){
             Log.v(TAG, "movie_parcel not found");
             closeOnError();
