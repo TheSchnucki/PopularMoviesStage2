@@ -19,8 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".DetailActivity"
+        <activity
+            android:name=".DetailActivity"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -28,10 +28,14 @@
         </activity>
 
         <provider
+            android:name=".data.MovieContentProvider"
             android:authorities="com.theschnucki.popularmoviesstage2"
-            android:name="com.theschnucki.popularmoviesstage2.data.MovieContentProvider"
-            android:exported="false"/>
+            android:exported="false" />
 
+        <activity
+            android:name=".DetailTabedActivity"
+            android:label="@string/title_activity_detail_tabed"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
