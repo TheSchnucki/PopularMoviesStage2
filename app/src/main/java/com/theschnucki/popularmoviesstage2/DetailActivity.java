@@ -89,13 +89,13 @@ public class DetailActivity extends AppCompatActivity {
             favoriteChangeFlb.setImageResource(R.drawable.ic_favorite_border);
             movie.setIsFavorite(false);
             Log.v(TAG, "Favorite = " + movie.getIsFavorite());
+            deleteMovieFromFavorites();
         }
 
     }
 
     public int checkIfIsFavorite () {
 
-        //TODO check if Movie is already in Favorites??
         String stringTBDbId = Integer.toString(movie.getTMDbId());
         Uri uri = MovieContract.MovieEntry.CONTENT_URI;
         uri = uri.buildUpon().appendPath(stringTBDbId).build();
@@ -134,5 +134,14 @@ public class DetailActivity extends AppCompatActivity {
             Log.v(TAG, "Movie already in Favorites");
         }
     }
-    //Todo add function to display floating action button representing the sate of favoriteness
+
+    public void deleteMovieFromFavorites() {
+
+        String stringTBDbId = Integer.toString(movie.getTMDbId());
+        Uri uri = MovieContract.MovieEntry.CONTENT_URI;
+        uri = uri.buildUpon().appendPath(stringTBDbId).build();
+
+        int deleted = getContentResolver().delete(uri, null, null);
+        Log.v(TAG, "Movies deleted " + deleted);
+    }
 }
