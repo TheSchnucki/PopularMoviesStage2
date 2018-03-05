@@ -1,5 +1,6 @@
 package com.theschnucki.popularmoviesstage2;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,15 +12,24 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+import com.theschnucki.popularmoviesstage2.model.Movie;
+
 public class DetailTabedActivity extends AppCompatActivity {
+
+    public static final String TAG = DetailTabedActivity.class.getSimpleName();
+
+    public static Movie movie = null;
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -40,6 +50,20 @@ public class DetailTabedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_tabed);
+
+        Intent intent = getIntent();
+
+        if (intent == null) {
+            Log.v(TAG, "Intent is null");
+            closeOnError();
+        }
+
+        //getting the extra from the starting activity
+        movie = intent.getParcelableExtra("movie_parcel");
+        if (movie == null){
+            Log.v(TAG, "movie_parcel not found");
+            closeOnError();
+        }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -90,6 +114,13 @@ public class DetailTabedActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void closeOnError() {
+        finish();
+    }
+
+
+
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -125,6 +156,38 @@ public class DetailTabedActivity extends AppCompatActivity {
         }
     }
 
+
+     // The Details fragment containing the Details view.
+
+    public static class DetailsFragment extends Fragment {
+
+        // The fragment argument representing the section number for this fragment.
+
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public DetailsFragment() {
+        }
+
+
+        // Returns a new instance of this fragment for the given section number.
+        public static DetailsFragment newInstance(int sectionNumber) {
+            DetailsFragment fragment = new DetailsFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
+            ImageView posterIv = rootView.findViewById(R.id.poster_Iv);
+            Picasso.with(getContext()).load(movie.getPosterPath()).into(posterIv);
+            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            return rootView;
+        }
+    }
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -139,7 +202,7 @@ public class DetailTabedActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            return DetailsFragment.newInstance(position + 1);
         }
 
         @Override
