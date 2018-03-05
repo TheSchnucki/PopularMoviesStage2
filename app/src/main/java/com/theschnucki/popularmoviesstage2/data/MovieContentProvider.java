@@ -122,7 +122,27 @@ public class MovieContentProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        throw new UnsupportedOperationException("Not yet implemented");
+
+        final SQLiteDatabase db = mMovieDbHelper.getWritableDatabase();
+
+        int match = sUriMatcher.match(uri);
+
+        int movieDeleted; //starts with 0
+
+        switch (match){
+            case MOVIE_WITH_ID:
+                String TMDbId = uri.getPathSegments().get(1);
+
+                movieDeleted = db.delete(TABLE_NAME, MovieContract.MovieEntry.COLUMN_TMDB_ID + "=?", new String[]{TMDbId});
+                break;
+            default:
+                throw new UnsupportedOperationException("Un known uri:" + uri);
+        }
+
+        //
+        if (movieDeleted != 0) getContext().getContentResolver().notifyChange(uri, null);
+
+        return movieDeleted;
     }
 
     @Override
