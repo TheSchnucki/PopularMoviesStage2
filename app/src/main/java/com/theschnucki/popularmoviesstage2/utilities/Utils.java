@@ -39,7 +39,7 @@ public class Utils {
 
             movieCursor.moveToNext();
         }
-
+        movieCursor.close();
         return movieList;
     }
 

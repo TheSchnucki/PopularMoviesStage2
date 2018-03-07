@@ -1,10 +1,8 @@
 package com.theschnucki.popularmoviesstage2;
 
-import android.app.LoaderManager;
-import android.content.AsyncTaskLoader;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -20,7 +18,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ZoomControls;
 
 import com.theschnucki.popularmoviesstage2.data.MovieContract;
 import com.theschnucki.popularmoviesstage2.model.Movie;
@@ -36,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private static final String API_KEY = BuildConfig.API_KEY;
+    private static final int MOVIE_DELETED_REQUEST = 0;
+    private static final int RESULT_DELETION = 0;
 
     private RecyclerView mRecyclerView;
     private MovieAdapter mMovieAdapter;
@@ -94,14 +93,23 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     }
 
+
     @Override
     public void onClick(Movie movie) {
         Context context = this;
 
-        Intent intent = new Intent(this, DetailActivity.class);
+        Intent intent = new Intent(this, DetailTabedActivity.class);
         intent.putExtra("movie_parcel", movie);
-        startActivity(intent);
-        //TODO get the information if movie is set favorite
+        startActivityForResult(intent, MOVIE_DELETED_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == MOVIE_DELETED_REQUEST) {
+            if (resultCode == RESULT_DELETION){
+                loadMovieData();
+            }
+        }
     }
 
     //This method will make the MovieGrid visible and hide the error message
@@ -131,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             if (params.length == 0) return null;
 
             String sortOrder = params[0];
-            URL movieRequestUrl = NetworkUtils.buildUrl(sortOrder);
+            URL movieRequestUrl = NetworkUtils.buildMovieUrl(sortOrder);
 
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpsURL(movieRequestUrl);

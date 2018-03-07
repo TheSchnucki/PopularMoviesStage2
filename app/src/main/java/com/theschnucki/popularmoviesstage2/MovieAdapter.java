@@ -18,7 +18,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
 
     private List<Movie> mMovieList;
 
-    //An on click Handler to interface with the RecyclerView
+    /**
+     *An on click Handler to interface with the RecyclerView
+     */
     private final MovieAdapterOnClickHandler mClickHandler;
 
     public interface MovieAdapterOnClickHandler {
