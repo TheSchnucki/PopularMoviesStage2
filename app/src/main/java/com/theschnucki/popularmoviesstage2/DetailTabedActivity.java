@@ -1,5 +1,6 @@
 package com.theschnucki.popularmoviesstage2;
 
+import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -260,12 +261,23 @@ public class DetailTabedActivity extends AppCompatActivity {
 
         @Override
         public void onClick(Trailer trailer) {
-            Context context = getContext();
+
+            Context context = getActivity().getApplicationContext();
+
+            final String YOUTUBE_APP_PREFIX = "vnd.youtube:";
+            final String YOUTUBE_WEB_PREFIX = "https://www.youtube.com/watch?v=";
+
 
             //TODO implement the trailer video play
-            //Intent intent = new Intent(this, DetailTabedActivity.class);
-            //intent.putExtra("movie_parcel", movie);
-            //startActivity(intent);
+
+            Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_APP_PREFIX + String.valueOf(trailer.getKey())));
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_WEB_PREFIX + String.valueOf(trailer.getKey())));
+
+            try {
+                context.startActivity(appIntent);
+            } catch (ActivityNotFoundException ev) {
+                context.startActivity(webIntent);
+            }
         }
 
     }
