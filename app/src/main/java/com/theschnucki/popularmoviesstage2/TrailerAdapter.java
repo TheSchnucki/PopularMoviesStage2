@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.theschnucki.popularmoviesstage2.model.Trailer;
 
@@ -27,16 +27,21 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
         void onClick (Trailer trailer);
     }
 
-    public TrailerAdapter(TrailerAdapterOnClickHandler clickHandler) {
+    public TrailerAdapter(TrailerAdapterOnClickHandler clickHandler ) {
         mClickHandler = clickHandler;
     }
 
     public class TrailerAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public ImageView posterIv;
+
+        public TextView nameTv;
+        public TextView typeTv;
 
         public TrailerAdapterViewHolder(View view) {
             super(view);
-            posterIv = view.findViewById(R.id.grid_item_iv);
+
+            nameTv = view.findViewById(R.id.name_tv);
+            typeTv = view.findViewById(R.id.type_tv);
+
             view.setOnClickListener(this);
         }
 
@@ -55,17 +60,18 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
         Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View view = inflater.inflate(R.layout.grid_item, viewGroup, false);
+
+
+        View view = inflater.inflate(R.layout.trailer_item, viewGroup, false);
         return new TrailerAdapterViewHolder(view);
     }
 
     //called by RecyclerView to put Data into ViewHolder
     @Override
     public void onBindViewHolder(TrailerAdapterViewHolder trailerAdapterViewHolder, int position) {
-        String name = mTrailerList.get(position).getName();
 
-        //Context context = TrailerAdapterViewHolder.nameTv.getContext();
-        //Picasso.with(context).load(posterPath).into(TrailerAdapterViewHolder.posterIv);
+        trailerAdapterViewHolder.nameTv.setText(mTrailerList.get(position).getName());
+        trailerAdapterViewHolder.typeTv.setText(mTrailerList.get(position).getType());
     }
 
     @Override

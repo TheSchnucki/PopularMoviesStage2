@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.theschnucki.popularmoviesstage2.data.MovieContract;
 import com.theschnucki.popularmoviesstage2.model.Movie;
-import com.theschnucki.popularmoviesstage2.utilities.MovieJsonUtils;
+import com.theschnucki.popularmoviesstage2.utilities.JsonUtils;
 import com.theschnucki.popularmoviesstage2.utilities.NetworkUtils;
 import com.theschnucki.popularmoviesstage2.utilities.Utils;
 
@@ -137,12 +137,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             if (params.length == 0) return null;
 
             String sortOrder = params[0];
-            URL movieRequestUrl = NetworkUtils.buildUrl(sortOrder);
+            URL movieRequestUrl = NetworkUtils.buildMovieUrl(sortOrder);
 
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpsURL(movieRequestUrl);
 
-                List<Movie> simpleMovieList = MovieJsonUtils.getSimpleMovieListFromJson(MainActivity.this, jsonMovieResponse);
+                List<Movie> simpleMovieList = JsonUtils.getSimpleMovieListFromJson(MainActivity.this, jsonMovieResponse);
 
                 return simpleMovieList;
             } catch (Exception e) {
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private int calculateNumberOfColumns (Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        int scalingFactor = 180; //see MovieJsonUtils for resolution of downloaded image
+        int scalingFactor = 180; //see JsonUtils for resolution of downloaded image
         int noOfColumns = (int) (dpWidth/scalingFactor);
         return noOfColumns;
     }

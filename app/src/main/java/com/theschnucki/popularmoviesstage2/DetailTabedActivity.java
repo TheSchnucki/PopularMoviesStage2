@@ -1,9 +1,11 @@
 package com.theschnucki.popularmoviesstage2;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +32,12 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.theschnucki.popularmoviesstage2.data.MovieContract;
 import com.theschnucki.popularmoviesstage2.model.Movie;
+import com.theschnucki.popularmoviesstage2.model.Trailer;
+import com.theschnucki.popularmoviesstage2.utilities.JsonUtils;
+import com.theschnucki.popularmoviesstage2.utilities.NetworkUtils;
+
+import java.net.URL;
+import java.util.List;
 
 public class DetailTabedActivity extends AppCompatActivity {
 
@@ -206,14 +214,14 @@ public class DetailTabedActivity extends AppCompatActivity {
         }
     }
 
-    /*public static class TrailerFragment extends Fragment {
+    public static class TrailerFragment extends Fragment implements TrailerAdapter.TrailerAdapterOnClickHandler{
 
         private static final String ARG_SECTION_NUMBER = "section_number";
 
         public TrailerFragment() {}
 
-        public static DetailsFragment newInstance(int sectionNumber) {
-            DetailsFragment fragment = new DetailsFragment();
+        public static TrailerFragment newInstance(int sectionNumber) {
+            TrailerFragment fragment = new TrailerFragment();
             Bundle args = new Bundle();
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
@@ -225,33 +233,32 @@ public class DetailTabedActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_trailer, container, false);
-            // 1. get a reference to recyclerView
+
             RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.trailer_rv);
 
-            // 2. set layoutManger
             recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-            // this is data fro recycler view
-            ItemData itemsData[] = {
-                    new ItemData("Indigo", R.drawable.circle),
-                    new ItemData("Red", R.drawable.color_ic_launcher),
-                    new ItemData("Blue", R.drawable.indigo),
-                    new ItemData("Green", R.drawable.circle),
-                    new ItemData("Amber", R.drawable.color_ic_launcher),
-                    new ItemData("Deep Orange", R.drawable.indigo)
-            };
+            TrailerAdapter mTrailerAdapter = new TrailerAdapter(this);
 
+            recyclerView.setAdapter(mTrailerAdapter);
 
-            // 3. create an adapter
-            TrailerAdapter mAdapter = new TrailerAdapter(itemsData);
-            // 4. set adapter
-            recyclerView.setAdapter(mAdapter);
-            // 5. set item animator to DefaultAnimator
             recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             return rootView;
         }
-    }*/
+
+        @Override
+        public void onClick(Trailer trailer) {
+            Context context = getContext();
+
+            //TODO implement the trailer video play
+            //Intent intent = new Intent(this, DetailTabedActivity.class);
+            //intent.putExtra("movie_parcel", movie);
+            //startActivity(intent);
+        }
+
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -266,7 +273,11 @@ public class DetailTabedActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position == 0)  return DetailsFragment.newInstance(position + 1);
+            if (position == 0){
+                return DetailsFragment.newInstance(position + 1);
+            } else if (position == 1) {
+                return DetailsFragment.newInstance(position + 1);
+            }
             return PlaceholderFragment.newInstance(position + 1);
         }
 
@@ -274,6 +285,48 @@ public class DetailTabedActivity extends AppCompatActivity {
         public int getCount() {
             // Show 3 total pages.
             return 3;
+        }
+    }
+
+    public class FetchTrailersTask extends AsyncTask<String, Void, List<Trailer>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //mLoadingIndicator.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected List<Trailer> doInBackground(String... params) {
+
+            //TODO delete this there will be no params for Trailer
+            //if there are no search parameter
+            //if (params.length == 0) return null;
+
+            //String sortOrder = params[0];
+            URL trailerRequestUrl = NetworkUtils.buildTrailerUrl(movie.getTMDbId());
+
+            try {
+                String jsonTrailerResponse = NetworkUtils.getResponseFromHttpsURL(trailerRequestUrl);
+
+                List<Trailer> simpleTrailerList = JsonUtils.getSimpleTrailerListFromJson(DetailTabedActivity.this, jsonTrailerResponse);
+
+                return simpleTrailerList;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<Trailer> loadedTrailerList) {
+            //mLoadingIndicator.setVisibility(View.INVISIBLE);
+            if (loadedTrailerList != null) {
+                //showMovieDataView();
+                //mTrailerAdapter.setTrailerList(loadedTrailerList);
+            } else {
+                //showErrorMessage();
+            }
         }
     }
 

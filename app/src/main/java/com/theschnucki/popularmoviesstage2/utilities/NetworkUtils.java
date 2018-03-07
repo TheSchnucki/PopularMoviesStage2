@@ -24,14 +24,35 @@ public class NetworkUtils {
     private static final String MOVIE_BASE_URL = "https://api.themoviedb.org/3";
 
     //other URL format additions
-    //final static String MODE_PARAM = "discover";
     final static String MEDIUM_PARAM = "movie";
+    final static String VIDEO_PARAM = "video";
 
-    //build the URL to communicate with the server
-    public static URL buildUrl(String sortOrder) {
+    //build the URL to communicate Movies with the server
+    public static URL buildMovieUrl(String sortOrder) {
         Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                 .appendPath(MEDIUM_PARAM)
                 .appendPath(sortOrder)
+                .appendQueryParameter("api_key", API_KEY)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        Log.v(TAG, "Built URI " + url);
+
+        return url;
+    }
+
+    //build the URL to communicate Trailer with the server
+    public static URL buildTrailerUrl(int movieId) {
+        Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                .appendPath(MEDIUM_PARAM)
+                .appendPath(String.valueOf(movieId))
+                .appendPath(VIDEO_PARAM)
                 .appendQueryParameter("api_key", API_KEY)
                 .build();
 
