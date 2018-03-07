@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -43,6 +44,8 @@ public class DetailTabedActivity extends AppCompatActivity {
 
     public static final String TAG = DetailTabedActivity.class.getSimpleName();
 
+    private static TrailerAdapter mTrailerAdapter;
+
     public static Movie movie = null;
 
     /**
@@ -79,22 +82,22 @@ public class DetailTabedActivity extends AppCompatActivity {
             closeOnError();
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
 
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        final FloatingActionButton favoriteChangeFab = (FloatingActionButton) findViewById(R.id.favorite_fab);
+        final FloatingActionButton favoriteChangeFab = findViewById(R.id.favorite_fab);
 
         setImageOnFab(favoriteChangeFab);
         //Set image on FAB
@@ -108,6 +111,7 @@ public class DetailTabedActivity extends AppCompatActivity {
             }
         });
 
+        loadTrailerData();
     }
 
 
@@ -169,7 +173,7 @@ public class DetailTabedActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_placeholder, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            TextView textView = rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
             return rootView;
         }
@@ -214,9 +218,15 @@ public class DetailTabedActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Trailer Fragment starts here
+     */
     public static class TrailerFragment extends Fragment implements TrailerAdapter.TrailerAdapterOnClickHandler{
 
         private static final String ARG_SECTION_NUMBER = "section_number";
+
+        private RecyclerView mRecyclerView;
 
         public TrailerFragment() {}
 
@@ -233,16 +243,17 @@ public class DetailTabedActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
 
             View rootView = inflater.inflate(R.layout.fragment_trailer, container, false);
+            rootView.setTag(TAG);
 
-            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.trailer_rv);
+            mRecyclerView = rootView.findViewById(R.id.trailer_rv);
 
-            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-            TrailerAdapter mTrailerAdapter = new TrailerAdapter(this);
+            mTrailerAdapter = new TrailerAdapter(this);
 
-            recyclerView.setAdapter(mTrailerAdapter);
+            mRecyclerView.setAdapter(mTrailerAdapter);
 
-            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
             return rootView;
         }
@@ -276,7 +287,7 @@ public class DetailTabedActivity extends AppCompatActivity {
             if (position == 0){
                 return DetailsFragment.newInstance(position + 1);
             } else if (position == 1) {
-                return DetailsFragment.newInstance(position + 1);
+                return TrailerFragment.newInstance(position + 1);
             }
             return PlaceholderFragment.newInstance(position + 1);
         }
@@ -286,6 +297,11 @@ public class DetailTabedActivity extends AppCompatActivity {
             // Show 3 total pages.
             return 3;
         }
+    }
+
+    private void loadTrailerData() {
+        //showMovieDataView();
+        new FetchTrailersTask().execute();
     }
 
     public class FetchTrailersTask extends AsyncTask<String, Void, List<Trailer>> {
@@ -323,7 +339,7 @@ public class DetailTabedActivity extends AppCompatActivity {
             //mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (loadedTrailerList != null) {
                 //showMovieDataView();
-                //mTrailerAdapter.setTrailerList(loadedTrailerList);
+                mTrailerAdapter.setTrailerList(loadedTrailerList);
             } else {
                 //showErrorMessage();
             }

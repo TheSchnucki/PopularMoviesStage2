@@ -60,8 +60,6 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
         Context context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-
-
         View view = inflater.inflate(R.layout.trailer_item, viewGroup, false);
         return new TrailerAdapterViewHolder(view);
     }

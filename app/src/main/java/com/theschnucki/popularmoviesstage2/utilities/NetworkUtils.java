@@ -25,7 +25,7 @@ public class NetworkUtils {
 
     //other URL format additions
     final static String MEDIUM_PARAM = "movie";
-    final static String VIDEO_PARAM = "video";
+    final static String VIDEO_PARAM = "videos";
 
     //build the URL to communicate Movies with the server
     public static URL buildMovieUrl(String sortOrder) {
