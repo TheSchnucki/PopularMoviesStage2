@@ -106,8 +106,6 @@ public class DetailTabedActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onClickChangeFavorite(favoriteChangeFab);
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
             }
         });
 
