@@ -1,6 +1,9 @@
 package com.theschnucki.popularmoviesstage2;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.theschnucki.popularmoviesstage2.data.MovieContract;
 import com.theschnucki.popularmoviesstage2.model.Movie;
 
 public class DetailTabedActivity extends AppCompatActivity {
@@ -80,12 +84,17 @@ public class DetailTabedActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        final FloatingActionButton favoriteChangeFab = (FloatingActionButton) findViewById(R.id.favorite_fab);
+
+        setImageOnFab(favoriteChangeFab);
+        //Set image on FAB
+
+        favoriteChangeFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                onClickChangeFavorite(favoriteChangeFab);
+                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                //        .setAction("Action", null).show();
             }
         });
 
@@ -212,4 +221,90 @@ public class DetailTabedActivity extends AppCompatActivity {
             return 3;
         }
     }
+
+
+    /**
+     * Here the Section for handling the button begins
+     *wired to a button on the UI to change the status of favorite or not
+     *
+     */
+    public void onClickChangeFavorite (FloatingActionButton favoriteChangeFab){
+        //todo write movie to database if not in remove if in
+        //todo  change appearance of the icon
+
+        if (!movie.getIsFavorite()){
+            favoriteChangeFab.setImageResource(R.drawable.ic_favorite);
+            movie.setIsFavorite(true);
+            Log.v(TAG, "Favorite = " + movie.getIsFavorite());
+            addMovieToFavorites();
+        } else {
+            favoriteChangeFab.setImageResource(R.drawable.ic_favorite_border);
+            movie.setIsFavorite(false);
+            Log.v(TAG, "Favorite = " + movie.getIsFavorite());
+            deleteMovieFromFavorites();
+        }
+
+    }
+
+    public int checkIfIsFavorite () {
+
+        String stringTBDbId = Integer.toString(movie.getTMDbId());
+        Uri uri = MovieContract.MovieEntry.CONTENT_URI;
+        uri = uri.buildUpon().appendPath(stringTBDbId).build();
+
+        Cursor testCursor = getContentResolver().query(uri,
+                null,
+                null,
+                null,
+                null);
+        Log.v(TAG, "Cursor length = " + testCursor.getCount());
+
+        return testCursor.getCount();
+    }
+
+    public void addMovieToFavorites () {
+
+        if (checkIfIsFavorite() == 0) {
+
+            ContentValues contentValues = new ContentValues();
+
+            contentValues.put(MovieContract.MovieEntry.COLUMN_TITLE, movie.getTitle());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_TMDB_ID, movie.getTMDbId());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE, movie.getVoteAverage());
+            contentValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, movie.getOverview());
+
+            //insert Movie via Content resolver
+            Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
+
+            //TODO remove this log entry
+            if (uri != null) {
+                Log.v(TAG, "Movie entry successful");
+            }
+        } else {
+            Log.v(TAG, "Movie already in Favorites");
+        }
+    }
+
+    public void deleteMovieFromFavorites() {
+
+        String stringTBDbId = Integer.toString(movie.getTMDbId());
+        Uri uri = MovieContract.MovieEntry.CONTENT_URI;
+        uri = uri.buildUpon().appendPath(stringTBDbId).build();
+
+        int deleted = getContentResolver().delete(uri, null, null);
+        Log.v(TAG, "Movies deleted " + deleted);
+    }
+
+    private void setImageOnFab(FloatingActionButton favoriteChangeFab){
+        if (checkIfIsFavorite() != 0){
+            favoriteChangeFab.setImageResource(R.drawable.ic_favorite);
+            movie.setIsFavorite(true);
+        } else {
+            favoriteChangeFab.setImageResource(R.drawable.ic_favorite_border);
+            movie.setIsFavorite(false);
+        }
+    }
 }
+

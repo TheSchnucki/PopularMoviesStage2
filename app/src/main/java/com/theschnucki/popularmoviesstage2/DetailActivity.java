@@ -65,10 +65,10 @@ public class DetailActivity extends AppCompatActivity {
         voteAverageTv.setText(movie.getVoteAverage());
         overviewTv.setText(movie.getOverview());
 
-        FloatingActionButton favoriteChangeFlb = findViewById(R.id.favorite_fab);
+        FloatingActionButton favoriteChangeFab = findViewById(R.id.favorite_fab);
 
         if (checkIfIsFavorite() != 0){
-            favoriteChangeFlb.setImageResource(R.drawable.ic_favorite);
+            favoriteChangeFab.setImageResource(R.drawable.ic_favorite);
             movie.setIsFavorite(true);
         }
     }
