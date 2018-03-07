@@ -191,8 +191,15 @@ public class DetailTabedActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
             ImageView posterIv = rootView.findViewById(R.id.poster_Iv);
             Picasso.with(getContext()).load(movie.getPosterPath()).into(posterIv);
-            //TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            //textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+
+            TextView releaseDateTv = rootView.findViewById(R.id.release_date_Tv);
+            TextView voteAverageTv = rootView.findViewById(R.id.vote_average_Tv);
+            TextView overviewTv = rootView.findViewById(R.id.overview_Tv);
+
+            releaseDateTv.setText(movie.getReleaseDate());
+            voteAverageTv.setText(movie.getVoteAverage());
+            overviewTv.setText(movie.getOverview());
+
             return rootView;
         }
     }
