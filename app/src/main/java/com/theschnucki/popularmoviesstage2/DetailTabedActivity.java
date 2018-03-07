@@ -202,7 +202,8 @@ public class DetailTabedActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return DetailsFragment.newInstance(position + 1);
+            if (position == 0)  return DetailsFragment.newInstance(position + 1);
+            return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
