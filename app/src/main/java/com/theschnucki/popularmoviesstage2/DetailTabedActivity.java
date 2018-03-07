@@ -1,5 +1,6 @@
 package com.theschnucki.popularmoviesstage2;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
 import android.content.Context;
@@ -46,6 +47,8 @@ public class DetailTabedActivity extends AppCompatActivity {
     public static final String TAG = DetailTabedActivity.class.getSimpleName();
 
     private static TrailerAdapter mTrailerAdapter;
+
+    private static final int RESULT_DELETION = 0;
 
     public static Movie movie = null;
 
@@ -344,6 +347,8 @@ public class DetailTabedActivity extends AppCompatActivity {
                 e.printStackTrace();
                 return null;
             }
+
+
         }
 
         @Override
@@ -431,6 +436,9 @@ public class DetailTabedActivity extends AppCompatActivity {
 
         int deleted = getContentResolver().delete(uri, null, null);
         Log.v(TAG, "Movies deleted " + deleted);
+
+        Intent returnIntent = new Intent();
+        setResult(RESULT_DELETION,returnIntent);
     }
 
     private void setImageOnFab(FloatingActionButton favoriteChangeFab){
