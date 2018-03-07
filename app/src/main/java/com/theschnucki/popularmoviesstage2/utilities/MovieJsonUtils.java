@@ -1,10 +1,7 @@
 package com.theschnucki.popularmoviesstage2.utilities;
 
 import android.content.Context;
-import android.database.Cursor;
-import android.util.Log;
 
-import com.theschnucki.popularmoviesstage2.data.MovieContract;
 import com.theschnucki.popularmoviesstage2.model.Movie;
 
 import org.json.JSONArray;
@@ -15,11 +12,11 @@ import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JsonUtils {
+public class MovieJsonUtils {
 
-    //Utility to handle the JSON data from TMDb
+    //Utility to handle the Movie JSON data from TMDb
 
-    private static final String TAG = JsonUtils.class.getSimpleName();
+    private static final String TAG = MovieJsonUtils.class.getSimpleName();
 
     final static String MOVIE_LIST = "results";          //movies list
     final static String MOVIE_TITLE = "title";           //Title

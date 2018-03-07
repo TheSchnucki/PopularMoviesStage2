@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Picasso;
+import com.theschnucki.popularmoviesstage2.model.Trailer;
+
+import java.util.List;
 
 public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerAdapterViewHolder>{
 
@@ -60,9 +62,10 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerA
     //called by RecyclerView to put Data into ViewHolder
     @Override
     public void onBindViewHolder(TrailerAdapterViewHolder trailerAdapterViewHolder, int position) {
-        String posterPath = mTrailerList.get(position).getPosterPath();
-        Context context = TrailerAdapterViewHolder.posterIv.getContext();
-        Picasso.with(context).load(posterPath).into(TrailerAdapterViewHolder.posterIv);
+        String name = mTrailerList.get(position).getName();
+
+        //Context context = TrailerAdapterViewHolder.nameTv.getContext();
+        //Picasso.with(context).load(posterPath).into(TrailerAdapterViewHolder.posterIv);
     }
 
     @Override

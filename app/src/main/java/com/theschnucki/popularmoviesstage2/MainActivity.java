@@ -1,10 +1,7 @@
 package com.theschnucki.popularmoviesstage2;
 
-import android.app.LoaderManager;
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -20,11 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.ZoomControls;
 
 import com.theschnucki.popularmoviesstage2.data.MovieContract;
 import com.theschnucki.popularmoviesstage2.model.Movie;
-import com.theschnucki.popularmoviesstage2.utilities.JsonUtils;
+import com.theschnucki.popularmoviesstage2.utilities.MovieJsonUtils;
 import com.theschnucki.popularmoviesstage2.utilities.NetworkUtils;
 import com.theschnucki.popularmoviesstage2.utilities.Utils;
 
@@ -146,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             try {
                 String jsonMovieResponse = NetworkUtils.getResponseFromHttpsURL(movieRequestUrl);
 
-                List<Movie> simpleMovieList = JsonUtils.getSimpleMovieListFromJson(MainActivity.this, jsonMovieResponse);
+                List<Movie> simpleMovieList = MovieJsonUtils.getSimpleMovieListFromJson(MainActivity.this, jsonMovieResponse);
 
                 return simpleMovieList;
             } catch (Exception e) {
@@ -247,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private int calculateNumberOfColumns (Context context) {
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
-        int scalingFactor = 180; //see JsonUtils for resolution of downloaded image
+        int scalingFactor = 180; //see MovieJsonUtils for resolution of downloaded image
         int noOfColumns = (int) (dpWidth/scalingFactor);
         return noOfColumns;
     }

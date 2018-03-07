@@ -206,7 +206,7 @@ public class DetailTabedActivity extends AppCompatActivity {
         }
     }
 
-    public static class TrailerFragment extends Fragment {
+    /*public static class TrailerFragment extends Fragment {
 
         private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -251,7 +251,7 @@ public class DetailTabedActivity extends AppCompatActivity {
 
             return rootView;
         }
-    }
+    }*/
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
