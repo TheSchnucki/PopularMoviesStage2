@@ -7,6 +7,9 @@ import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -164,8 +167,9 @@ public class DetailTabedActivity extends AppCompatActivity {
         }
     }
 
-
-     // The Details fragment containing the Details view.
+    /**
+     * The Details fragment containing the Details view.
+     */
 
     public static class DetailsFragment extends Fragment {
 
@@ -173,9 +177,7 @@ public class DetailTabedActivity extends AppCompatActivity {
 
         private static final String ARG_SECTION_NUMBER = "section_number";
 
-        public DetailsFragment() {
-        }
-
+        public DetailsFragment() {}
 
         // Returns a new instance of this fragment for the given section number.
         public static DetailsFragment newInstance(int sectionNumber) {
@@ -199,6 +201,53 @@ public class DetailTabedActivity extends AppCompatActivity {
             releaseDateTv.setText(movie.getReleaseDate());
             voteAverageTv.setText(movie.getVoteAverage());
             overviewTv.setText(movie.getOverview());
+
+            return rootView;
+        }
+    }
+
+    public static class TrailerFragment extends Fragment {
+
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        public TrailerFragment() {}
+
+        public static DetailsFragment newInstance(int sectionNumber) {
+            DetailsFragment fragment = new DetailsFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+
+            View rootView = inflater.inflate(R.layout.fragment_trailer, container, false);
+            // 1. get a reference to recyclerView
+            RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.trailer_rv);
+
+            // 2. set layoutManger
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+            // this is data fro recycler view
+            ItemData itemsData[] = {
+                    new ItemData("Indigo", R.drawable.circle),
+                    new ItemData("Red", R.drawable.color_ic_launcher),
+                    new ItemData("Blue", R.drawable.indigo),
+                    new ItemData("Green", R.drawable.circle),
+                    new ItemData("Amber", R.drawable.color_ic_launcher),
+                    new ItemData("Deep Orange", R.drawable.indigo)
+            };
+
+
+            // 3. create an adapter
+            TrailerAdapter mAdapter = new TrailerAdapter(itemsData);
+            // 4. set adapter
+            recyclerView.setAdapter(mAdapter);
+            // 5. set item animator to DefaultAnimator
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
 
             return rootView;
         }
@@ -231,7 +280,7 @@ public class DetailTabedActivity extends AppCompatActivity {
 
     /**
      * Here the Section for handling the button begins
-     *wired to a button on the UI to change the status of favorite or not
+     * wired to a button on the UI to change the status of favorite or not
      *
      */
     public void onClickChangeFavorite (FloatingActionButton favoriteChangeFab){
