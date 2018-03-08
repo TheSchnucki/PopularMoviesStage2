@@ -43,6 +43,7 @@ public class DetailTabedActivity extends AppCompatActivity {
     public static final String TAG = DetailTabedActivity.class.getSimpleName();
 
     private static TrailerAdapter mTrailerAdapter;
+    private static ReviewAdapter mReviewAdapter;
 
 
     public static Movie movie = null;
@@ -115,9 +116,6 @@ public class DetailTabedActivity extends AppCompatActivity {
         finish();
     }
 
-
-
-
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -156,7 +154,6 @@ public class DetailTabedActivity extends AppCompatActivity {
     /**
      * The Details fragment containing the Details view.
      */
-
     public static class DetailsFragment extends Fragment {
 
         // The fragment argument representing the section number for this fragment.
@@ -255,35 +252,6 @@ public class DetailTabedActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            if (position == 0){
-                return DetailsFragment.newInstance(position + 1);
-            } else if (position == 1) {
-                return TrailerFragment.newInstance(position + 1);
-            }
-            return PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
-    }
-
     private void loadTrailerData() {
         //showMovieDataView();
         new FetchTrailersTask().execute();
@@ -330,6 +298,75 @@ public class DetailTabedActivity extends AppCompatActivity {
             } else {
                 //showErrorMessage();
             }
+        }
+    }
+
+    /**
+     * Review Fragment starts here
+     */
+    public static class ReviewFragment extends Fragment {
+
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        private RecyclerView mRecyclerView;
+
+        public ReviewFragment() {}
+
+        public static ReviewFragment newInstance(int sectionNumber) {
+            ReviewFragment fragment = new ReviewFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+
+            View rootView = inflater.inflate(R.layout.fragment_reviews, container, false);
+            rootView.setTag(TAG);
+
+            mRecyclerView = rootView.findViewById(R.id.reviews_rv);
+
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+            mReviewAdapter = new ReviewAdapter();
+
+            mRecyclerView.setAdapter(mReviewAdapter);
+
+            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+            return rootView;
+        }
+    }
+
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            if (position == 0){
+                return DetailsFragment.newInstance(position + 1);
+            } else if (position == 1) {
+                return TrailerFragment.newInstance(position + 1);
+            }
+            return PlaceholderFragment.newInstance(position + 1);
+        }
+
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return 3;
         }
     }
 
