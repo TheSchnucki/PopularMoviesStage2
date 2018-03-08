@@ -44,7 +44,6 @@ public class JsonUtils {
 
     private final static String ERROR_MESSAGE_CODE = "cod";
 
-    //TODO insert the correct prefix
     private final static String TRAILER_PATH_PREFIX = "http://image.tmdb.org/t/p/"; //poster path base path
 
 

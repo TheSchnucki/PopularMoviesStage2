@@ -241,9 +241,6 @@ public class DetailTabedActivity extends AppCompatActivity {
             final String YOUTUBE_APP_PREFIX = "vnd.youtube:";
             final String YOUTUBE_WEB_PREFIX = "https://www.youtube.com/watch?v=";
 
-
-            //TODO implement the trailer video play
-
             Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_APP_PREFIX + String.valueOf(trailer.getKey())));
             Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_WEB_PREFIX + String.valueOf(trailer.getKey())));
 
@@ -270,11 +267,6 @@ public class DetailTabedActivity extends AppCompatActivity {
             @Override
             protected List<Trailer> doInBackground(String... params) {
 
-                //TODO delete this there will be no params for Trailer
-                //if there are no search parameter
-                //if (params.length == 0) return null;
-
-                //String sortOrder = params[0];
                 URL trailerRequestUrl = NetworkUtils.buildTrailerUrl(movie.getTMDbId());
 
                 try {
@@ -367,11 +359,6 @@ public class DetailTabedActivity extends AppCompatActivity {
             @Override
             protected List<Review> doInBackground(String... params) {
 
-                //TODO delete this there will be no params for Trailer
-                //if there are no search parameter
-                //if (params.length == 0) return null;
-
-                //String sortOrder = params[0];
                 URL reviewRequestUrl = NetworkUtils.buildReviewUrl(movie.getTMDbId());
 
                 try {
@@ -392,7 +379,6 @@ public class DetailTabedActivity extends AppCompatActivity {
                 if (loadedReviewList != null) {
                     //showMovieDataView();
 
-                    // TODO Find out what the problem is
                     mReviewAdapter.setReviewList(loadedReviewList);
 
                 } else {
@@ -441,8 +427,6 @@ public class DetailTabedActivity extends AppCompatActivity {
      *
      */
     public void onClickChangeFavorite (FloatingActionButton favoriteChangeFab){
-        //todo write movie to database if not in remove if in
-        //todo  change appearance of the icon
 
         if (!movie.getIsFavorite()){
             favoriteChangeFab.setImageResource(R.drawable.ic_favorite);
@@ -490,10 +474,6 @@ public class DetailTabedActivity extends AppCompatActivity {
             //insert Movie via Content resolver
             Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
 
-            //TODO remove this log entry
-            if (uri != null) {
-                Log.v(TAG, "Movie entry successful");
-            }
         } else {
             Log.v(TAG, "Movie already in Favorites");
         }

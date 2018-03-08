@@ -210,9 +210,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public boolean onOptionsItemSelected (MenuItem item) {
         int id = item.getItemId();
 
-        //TODO check those IFs for improvements
-        //TODO ensure the selection survives Activity changes
-
         if (id == R.id.pop_sort){
             sortOrder = getString(R.string.sort_order_popular);
             loadMovieData();
