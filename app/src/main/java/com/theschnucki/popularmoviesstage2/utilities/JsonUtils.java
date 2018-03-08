@@ -20,34 +20,29 @@ public class JsonUtils {
 
     private static final String TAG = JsonUtils.class.getSimpleName();
 
-    final static String MOVIE_LIST = "results";          //movies list
-    final static String MOVIE_TITLE = "title";           //Title
-    final static String TMDB_ID = "id";                  //ID
-    final static String RELEASE_DATE = "release_date";   //releaseDate
-    final static String POSTER_PATH = "poster_path";     //Poster
-    final static String VOTE_AVERAGE = "vote_average";   //VoteAverage
-    final static String OVERVIEW = "overview";           //plotSynopsis
+    private final static String MOVIE_LIST = "results";          //movies list
+    private final static String MOVIE_TITLE = "title";           //Title
+    private final static String TMDB_ID = "id";                  //ID
+    private final static String RELEASE_DATE = "release_date";   //releaseDate
+    private final static String POSTER_PATH = "poster_path";     //Poster
+    private final static String VOTE_AVERAGE = "vote_average";   //VoteAverage
+    private final static String OVERVIEW = "overview";           //plotSynopsis
 
-    final static String POSTER_PATH_PREFIX = "http://image.tmdb.org/t/p/"; //poster path base path
-    final static String POSTER_RESOLUTION = "w185/";                       // resolution of the poster path
-
-
-    final static String TRAILER_LIST = "results";       //trailer list
-    final static String TRAILER_NAME = "name";          //Name
-    final static String TRAILER_KEY = "key";            //Key
-    final static String TRAILER_TYPE = "type";          //Type
-
-    final static String REVIEW_LIST = "results";        //review list
-    final static String REVIEW_AUTHOR = "author";       //author
-    final static String REVIEW_CONTENTS = "content";    //contents
-    final static String REVIEW_URL = "url";             //URL
+    private final static String POSTER_PATH_PREFIX = "http://image.tmdb.org/t/p/"; //poster path base path
+    private final static String POSTER_RESOLUTION = "w185/";                       // resolution of the poster path
 
 
-    final static String ERROR_MESSAGE_CODE = "cod";
+    private final static String TRAILER_LIST = "results";       //trailer list
+    private final static String TRAILER_NAME = "name";          //Name
+    private final static String TRAILER_KEY = "key";            //Key
+    private final static String TRAILER_TYPE = "type";          //Type
 
-    //TODO insert the correct prefix
-    final static String TRAILER_PATH_PREFIX = "http://image.tmdb.org/t/p/"; //poster path base path
+    private final static String REVIEW_LIST = "results";        //review list
+    private final static String REVIEW_AUTHOR = "author";       //author
+    private final static String REVIEW_CONTENTS = "content";    //contents
+    private final static String REVIEW_URL = "url";             //URL
 
+    private final static String ERROR_MESSAGE_CODE = "cod";
 
     public static List<Movie> getSimpleMovieListFromJson(Context context, String movieJsonString) throws JSONException {
 
