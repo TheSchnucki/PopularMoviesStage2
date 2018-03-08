@@ -46,7 +46,6 @@ public class DetailTabedActivity extends AppCompatActivity {
     private static TrailerAdapter mTrailerAdapter;
     private static ReviewAdapter mReviewAdapter;
 
-
     public static Movie movie = null;
 
     /**
@@ -111,7 +110,7 @@ public class DetailTabedActivity extends AppCompatActivity {
         });
 
         loadTrailerData();
-        //loadReviewData();
+        loadReviewData();
     }
 
     private void closeOnError() {
@@ -190,7 +189,6 @@ public class DetailTabedActivity extends AppCompatActivity {
             return rootView;
         }
     }
-
 
     /**
      * Trailer Fragment starts here
@@ -383,7 +381,10 @@ public class DetailTabedActivity extends AppCompatActivity {
             //mLoadingIndicator.setVisibility(View.INVISIBLE);
             if (loadedReviewList != null) {
                 //showMovieDataView();
-                mReviewAdapter.setReviewList(loadedReviewList);
+
+                // TODO Find out what the problem is
+                //mReviewAdapter.setReviewList(loadedReviewList);
+
             } else {
                 //showErrorMessage();
             }
