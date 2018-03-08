@@ -31,6 +31,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.theschnucki.popularmoviesstage2.data.MovieContract;
 import com.theschnucki.popularmoviesstage2.model.Movie;
+import com.theschnucki.popularmoviesstage2.model.Review;
 import com.theschnucki.popularmoviesstage2.model.Trailer;
 import com.theschnucki.popularmoviesstage2.utilities.JsonUtils;
 import com.theschnucki.popularmoviesstage2.utilities.NetworkUtils;
@@ -110,6 +111,7 @@ public class DetailTabedActivity extends AppCompatActivity {
         });
 
         loadTrailerData();
+        //loadReviewData();
     }
 
     private void closeOnError() {
@@ -341,6 +343,53 @@ public class DetailTabedActivity extends AppCompatActivity {
         }
     }
 
+    private void loadReviewData() {
+        //showMovieDataView();
+        new FetchReviewsTask().execute();
+    }
+
+    public class FetchReviewsTask extends AsyncTask<String, Void, List<Review>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //mLoadingIndicator.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected List<Review> doInBackground(String... params) {
+
+            //TODO delete this there will be no params for Trailer
+            //if there are no search parameter
+            //if (params.length == 0) return null;
+
+            //String sortOrder = params[0];
+            URL reviewRequestUrl = NetworkUtils.buildReviewUrl(movie.getTMDbId());
+
+            try {
+                String jsonReviewResponse = NetworkUtils.getResponseFromHttpsURL(reviewRequestUrl);
+
+                List<Review> simpleReviewList = JsonUtils.getSimpleReviewListFromJson(DetailTabedActivity.this, jsonReviewResponse);
+
+                return simpleReviewList;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<Review> loadedReviewList) {
+            //mLoadingIndicator.setVisibility(View.INVISIBLE);
+            if (loadedReviewList != null) {
+                //showMovieDataView();
+                mReviewAdapter.setReviewList(loadedReviewList);
+            } else {
+                //showErrorMessage();
+            }
+        }
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -359,8 +408,9 @@ public class DetailTabedActivity extends AppCompatActivity {
                 return DetailsFragment.newInstance(position + 1);
             } else if (position == 1) {
                 return TrailerFragment.newInstance(position + 1);
+            } else {
+                return ReviewFragment.newInstance(position + 1);
             }
-            return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
