@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -108,9 +109,6 @@ public class DetailTabedActivity extends AppCompatActivity {
                 onClickChangeFavorite(favoriteChangeFab);
             }
         });
-
-        loadTrailerData();
-        loadReviewData();
     }
 
     private void closeOnError() {
@@ -210,6 +208,12 @@ public class DetailTabedActivity extends AppCompatActivity {
         }
 
         @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            loadTrailerData();
+        }
+
+        @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
@@ -250,56 +254,57 @@ public class DetailTabedActivity extends AppCompatActivity {
             }
         }
 
-    }
-
-    private void loadTrailerData() {
-        //showMovieDataView();
-        new FetchTrailersTask().execute();
-    }
-
-    public class FetchTrailersTask extends AsyncTask<String, Void, List<Trailer>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //mLoadingIndicator.setVisibility(View.VISIBLE);
+        private void loadTrailerData() {
+            //showMovieDataView();
+            new FetchTrailersTask().execute();
         }
 
-        @Override
-        protected List<Trailer> doInBackground(String... params) {
+        public class FetchTrailersTask extends AsyncTask<String, Void, List<Trailer>> {
 
-            //TODO delete this there will be no params for Trailer
-            //if there are no search parameter
-            //if (params.length == 0) return null;
-
-            //String sortOrder = params[0];
-            URL trailerRequestUrl = NetworkUtils.buildTrailerUrl(movie.getTMDbId());
-
-            try {
-                String jsonTrailerResponse = NetworkUtils.getResponseFromHttpsURL(trailerRequestUrl);
-
-                List<Trailer> simpleTrailerList = JsonUtils.getSimpleTrailerListFromJson(DetailTabedActivity.this, jsonTrailerResponse);
-
-                return simpleTrailerList;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //mLoadingIndicator.setVisibility(View.VISIBLE);
             }
 
+            @Override
+            protected List<Trailer> doInBackground(String... params) {
 
-        }
+                //TODO delete this there will be no params for Trailer
+                //if there are no search parameter
+                //if (params.length == 0) return null;
 
-        @Override
-        protected void onPostExecute(List<Trailer> loadedTrailerList) {
-            //mLoadingIndicator.setVisibility(View.INVISIBLE);
-            if (loadedTrailerList != null) {
-                //showMovieDataView();
-                mTrailerAdapter.setTrailerList(loadedTrailerList);
-            } else {
-                //showErrorMessage();
+                //String sortOrder = params[0];
+                URL trailerRequestUrl = NetworkUtils.buildTrailerUrl(movie.getTMDbId());
+
+                try {
+                    String jsonTrailerResponse = NetworkUtils.getResponseFromHttpsURL(trailerRequestUrl);
+
+                    List<Trailer> simpleTrailerList = JsonUtils.getSimpleTrailerListFromJson(getActivity().getApplicationContext(), jsonTrailerResponse);
+
+                    return simpleTrailerList;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+
+
+            }
+
+            @Override
+            protected void onPostExecute(List<Trailer> loadedTrailerList) {
+                //mLoadingIndicator.setVisibility(View.INVISIBLE);
+                if (loadedTrailerList != null) {
+                    //showMovieDataView();
+                    mTrailerAdapter.setTrailerList(loadedTrailerList);
+                } else {
+                    //showErrorMessage();
+                }
             }
         }
     }
+
+
 
     /**
      * Review Fragment starts here
@@ -321,6 +326,12 @@ public class DetailTabedActivity extends AppCompatActivity {
         }
 
         @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            loadReviewData();
+        }
+
+        @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
@@ -339,57 +350,59 @@ public class DetailTabedActivity extends AppCompatActivity {
 
             return rootView;
         }
-    }
 
-    private void loadReviewData() {
-        //showMovieDataView();
-        new FetchReviewsTask().execute();
-    }
-
-    public class FetchReviewsTask extends AsyncTask<String, Void, List<Review>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //mLoadingIndicator.setVisibility(View.VISIBLE);
+        private void loadReviewData() {
+            //showMovieDataView();
+            new FetchReviewsTask().execute();
         }
 
-        @Override
-        protected List<Review> doInBackground(String... params) {
+        public class FetchReviewsTask extends AsyncTask<String, Void, List<Review>> {
 
-            //TODO delete this there will be no params for Trailer
-            //if there are no search parameter
-            //if (params.length == 0) return null;
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //mLoadingIndicator.setVisibility(View.VISIBLE);
+            }
 
-            //String sortOrder = params[0];
-            URL reviewRequestUrl = NetworkUtils.buildReviewUrl(movie.getTMDbId());
+            @Override
+            protected List<Review> doInBackground(String... params) {
 
-            try {
-                String jsonReviewResponse = NetworkUtils.getResponseFromHttpsURL(reviewRequestUrl);
+                //TODO delete this there will be no params for Trailer
+                //if there are no search parameter
+                //if (params.length == 0) return null;
 
-                List<Review> simpleReviewList = JsonUtils.getSimpleReviewListFromJson(DetailTabedActivity.this, jsonReviewResponse);
+                //String sortOrder = params[0];
+                URL reviewRequestUrl = NetworkUtils.buildReviewUrl(movie.getTMDbId());
 
-                return simpleReviewList;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
+                try {
+                    String jsonReviewResponse = NetworkUtils.getResponseFromHttpsURL(reviewRequestUrl);
+
+                    List<Review> simpleReviewList = JsonUtils.getSimpleReviewListFromJson(getActivity().getApplicationContext(), jsonReviewResponse);
+
+                    return simpleReviewList;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(List<Review> loadedReviewList) {
+                //mLoadingIndicator.setVisibility(View.INVISIBLE);
+                if (loadedReviewList != null) {
+                    //showMovieDataView();
+
+                    // TODO Find out what the problem is
+                    mReviewAdapter.setReviewList(loadedReviewList);
+
+                } else {
+                    //showErrorMessage();
+                }
             }
         }
-
-        @Override
-        protected void onPostExecute(List<Review> loadedReviewList) {
-            //mLoadingIndicator.setVisibility(View.INVISIBLE);
-            if (loadedReviewList != null) {
-                //showMovieDataView();
-
-                // TODO Find out what the problem is
-                //mReviewAdapter.setReviewList(loadedReviewList);
-
-            } else {
-                //showErrorMessage();
-            }
-        }
     }
+
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
