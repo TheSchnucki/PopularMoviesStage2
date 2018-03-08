@@ -2,7 +2,7 @@ package com.theschnucki.popularmoviesstage2.model;
 
 public class Trailer {
 
-    public static final String TAG = Trailer.class.getSimpleName();
+    private static final String TAG = Trailer.class.getSimpleName();
 
     private String key;
     private String name;

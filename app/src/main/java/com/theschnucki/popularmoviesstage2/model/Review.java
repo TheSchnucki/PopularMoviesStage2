@@ -2,7 +2,7 @@ package com.theschnucki.popularmoviesstage2.model;
 
 public class Review {
 
-    public static final String TAG = Review.class.getSimpleName();
+    private static final String TAG = Review.class.getSimpleName();
 
     private String author;
     private String contents;
