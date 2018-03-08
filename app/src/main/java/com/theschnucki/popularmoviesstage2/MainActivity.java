@@ -1,14 +1,13 @@
 package com.theschnucki.popularmoviesstage2;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -93,14 +92,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     }
 
-
     @Override
     public void onClick(Movie movie) {
-        Context context = this;
-
         Intent intent = new Intent(this, DetailTabedActivity.class);
         intent.putExtra("movie_parcel", movie);
-        startActivityForResult(intent, MOVIE_DELETED_REQUEST);
+        startActivity(intent);
     }
 
     @Override
@@ -213,9 +209,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     //Listens to changes in the sort order menu
     public boolean onOptionsItemSelected (MenuItem item) {
         int id = item.getItemId();
-
-        //TODO check those IFs for improvements
-        //TODO ensure the selection survives Activity changes
 
         if (id == R.id.pop_sort){
             sortOrder = getString(R.string.sort_order_popular);

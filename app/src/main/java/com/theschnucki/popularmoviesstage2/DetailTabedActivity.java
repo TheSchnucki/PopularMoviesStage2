@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.theschnucki.popularmoviesstage2.data.MovieContract;
 import com.theschnucki.popularmoviesstage2.model.Movie;
+import com.theschnucki.popularmoviesstage2.model.Review;
 import com.theschnucki.popularmoviesstage2.model.Trailer;
 import com.theschnucki.popularmoviesstage2.utilities.JsonUtils;
 import com.theschnucki.popularmoviesstage2.utilities.NetworkUtils;
@@ -43,8 +45,7 @@ public class DetailTabedActivity extends AppCompatActivity {
     public static final String TAG = DetailTabedActivity.class.getSimpleName();
 
     private static TrailerAdapter mTrailerAdapter;
-
-    private static final int RESULT_DELETION = 0;
+    private static ReviewAdapter mReviewAdapter;
 
     public static Movie movie = null;
 
@@ -108,16 +109,11 @@ public class DetailTabedActivity extends AppCompatActivity {
                 onClickChangeFavorite(favoriteChangeFab);
             }
         });
-
-        loadTrailerData();
     }
 
     private void closeOnError() {
         finish();
     }
-
-
-
 
     /**
      * A placeholder fragment containing a simple view.
@@ -157,7 +153,6 @@ public class DetailTabedActivity extends AppCompatActivity {
     /**
      * The Details fragment containing the Details view.
      */
-
     public static class DetailsFragment extends Fragment {
 
         // The fragment argument representing the section number for this fragment.
@@ -193,7 +188,6 @@ public class DetailTabedActivity extends AppCompatActivity {
         }
     }
 
-
     /**
      * Trailer Fragment starts here
      */
@@ -211,6 +205,12 @@ public class DetailTabedActivity extends AppCompatActivity {
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
             return fragment;
+        }
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            loadTrailerData();
         }
 
         @Override
@@ -241,9 +241,6 @@ public class DetailTabedActivity extends AppCompatActivity {
             final String YOUTUBE_APP_PREFIX = "vnd.youtube:";
             final String YOUTUBE_WEB_PREFIX = "https://www.youtube.com/watch?v=";
 
-
-            //TODO implement the trailer video play
-
             Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_APP_PREFIX + String.valueOf(trailer.getKey())));
             Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(YOUTUBE_WEB_PREFIX + String.valueOf(trailer.getKey())));
 
@@ -254,7 +251,144 @@ public class DetailTabedActivity extends AppCompatActivity {
             }
         }
 
+        private void loadTrailerData() {
+            //showMovieDataView();
+            new FetchTrailersTask().execute();
+        }
+
+        public class FetchTrailersTask extends AsyncTask<String, Void, List<Trailer>> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //mLoadingIndicator.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected List<Trailer> doInBackground(String... params) {
+
+                URL trailerRequestUrl = NetworkUtils.buildTrailerUrl(movie.getTMDbId());
+
+                try {
+                    String jsonTrailerResponse = NetworkUtils.getResponseFromHttpsURL(trailerRequestUrl);
+
+                    List<Trailer> simpleTrailerList = JsonUtils.getSimpleTrailerListFromJson(getActivity().getApplicationContext(), jsonTrailerResponse);
+
+                    return simpleTrailerList;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+
+
+            }
+
+            @Override
+            protected void onPostExecute(List<Trailer> loadedTrailerList) {
+                //mLoadingIndicator.setVisibility(View.INVISIBLE);
+                if (loadedTrailerList != null) {
+                    //showMovieDataView();
+                    mTrailerAdapter.setTrailerList(loadedTrailerList);
+                } else {
+                    //showErrorMessage();
+                }
+            }
+        }
     }
+
+
+
+    /**
+     * Review Fragment starts here
+     */
+    public static class ReviewFragment extends Fragment {
+
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        private RecyclerView mRecyclerView;
+
+        public ReviewFragment() {}
+
+        public static ReviewFragment newInstance(int sectionNumber) {
+            ReviewFragment fragment = new ReviewFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            loadReviewData();
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+
+            View rootView = inflater.inflate(R.layout.fragment_reviews, container, false);
+            rootView.setTag(TAG);
+
+            mRecyclerView = rootView.findViewById(R.id.reviews_rv);
+
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+            mReviewAdapter = new ReviewAdapter();
+
+            mRecyclerView.setAdapter(mReviewAdapter);
+
+            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+            return rootView;
+        }
+
+        private void loadReviewData() {
+            //showMovieDataView();
+            new FetchReviewsTask().execute();
+        }
+
+        public class FetchReviewsTask extends AsyncTask<String, Void, List<Review>> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //mLoadingIndicator.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            protected List<Review> doInBackground(String... params) {
+
+                URL reviewRequestUrl = NetworkUtils.buildReviewUrl(movie.getTMDbId());
+
+                try {
+                    String jsonReviewResponse = NetworkUtils.getResponseFromHttpsURL(reviewRequestUrl);
+
+                    List<Review> simpleReviewList = JsonUtils.getSimpleReviewListFromJson(getActivity().getApplicationContext(), jsonReviewResponse);
+
+                    return simpleReviewList;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(List<Review> loadedReviewList) {
+                //mLoadingIndicator.setVisibility(View.INVISIBLE);
+                if (loadedReviewList != null) {
+                    //showMovieDataView();
+
+                    mReviewAdapter.setReviewList(loadedReviewList);
+
+                } else {
+                    //showErrorMessage();
+                }
+            }
+        }
+    }
+
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -274,63 +408,15 @@ public class DetailTabedActivity extends AppCompatActivity {
                 return DetailsFragment.newInstance(position + 1);
             } else if (position == 1) {
                 return TrailerFragment.newInstance(position + 1);
+            } else {
+                return ReviewFragment.newInstance(position + 1);
             }
-            return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
             return 3;
-        }
-    }
-
-    private void loadTrailerData() {
-        //showMovieDataView();
-        new FetchTrailersTask().execute();
-    }
-
-    public class FetchTrailersTask extends AsyncTask<String, Void, List<Trailer>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            //mLoadingIndicator.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected List<Trailer> doInBackground(String... params) {
-
-            //TODO delete this there will be no params for Trailer
-            //if there are no search parameter
-            //if (params.length == 0) return null;
-
-            //String sortOrder = params[0];
-            URL trailerRequestUrl = NetworkUtils.buildTrailerUrl(movie.getTMDbId());
-
-            try {
-                String jsonTrailerResponse = NetworkUtils.getResponseFromHttpsURL(trailerRequestUrl);
-
-                List<Trailer> simpleTrailerList = JsonUtils.getSimpleTrailerListFromJson(DetailTabedActivity.this, jsonTrailerResponse);
-
-                return simpleTrailerList;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-
-
-        }
-
-        @Override
-        protected void onPostExecute(List<Trailer> loadedTrailerList) {
-            //mLoadingIndicator.setVisibility(View.INVISIBLE);
-            if (loadedTrailerList != null) {
-                //showMovieDataView();
-                mTrailerAdapter.setTrailerList(loadedTrailerList);
-            } else {
-                //showErrorMessage();
-            }
         }
     }
 
@@ -341,8 +427,6 @@ public class DetailTabedActivity extends AppCompatActivity {
      *
      */
     public void onClickChangeFavorite (FloatingActionButton favoriteChangeFab){
-        //todo write movie to database if not in remove if in
-        //todo  change appearance of the icon
 
         if (!movie.getIsFavorite()){
             favoriteChangeFab.setImageResource(R.drawable.ic_favorite);
@@ -390,10 +474,6 @@ public class DetailTabedActivity extends AppCompatActivity {
             //insert Movie via Content resolver
             Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
 
-            //TODO remove this log entry
-            if (uri != null) {
-                Log.v(TAG, "Movie entry successful");
-            }
         } else {
             Log.v(TAG, "Movie already in Favorites");
         }
@@ -407,9 +487,6 @@ public class DetailTabedActivity extends AppCompatActivity {
 
         int deleted = getContentResolver().delete(uri, null, null);
         Log.v(TAG, "Movies deleted " + deleted);
-
-        Intent returnIntent = new Intent();
-        setResult(RESULT_DELETION,returnIntent);
     }
 
     private void setImageOnFab(FloatingActionButton favoriteChangeFab){
