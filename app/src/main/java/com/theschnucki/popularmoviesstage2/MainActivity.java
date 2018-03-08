@@ -93,14 +93,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     }
 
-
     @Override
     public void onClick(Movie movie) {
-        Context context = this;
-
         Intent intent = new Intent(this, DetailTabedActivity.class);
         intent.putExtra("movie_parcel", movie);
-        startActivityForResult(intent, MOVIE_DELETED_REQUEST);
+        startActivity(intent);
     }
 
     @Override
