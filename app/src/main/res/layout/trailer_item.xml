@@ -19,7 +19,6 @@
             android:contentDescription="@string/movie_icon_content_description"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:scaleType="centerCrop"
             app:srcCompat="@drawable/ic_trailer" />
 
         <LinearLayout

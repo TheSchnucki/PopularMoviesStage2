@@ -4,10 +4,10 @@ public class Trailer {
 
     public static final String TAG = Trailer.class.getSimpleName();
 
-    public String key;
-    public String name;
-    public String type;
-    public String path;
+    private String key;
+    private String name;
+    private String type;
+    private String path;
 
     public String getKey() {
         return key;
