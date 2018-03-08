@@ -3,6 +3,7 @@ package com.theschnucki.popularmoviesstage2.utilities;
 import android.content.Context;
 
 import com.theschnucki.popularmoviesstage2.model.Movie;
+import com.theschnucki.popularmoviesstage2.model.Review;
 import com.theschnucki.popularmoviesstage2.model.Trailer;
 
 import org.json.JSONArray;
@@ -30,18 +31,23 @@ public class JsonUtils {
     final static String POSTER_PATH_PREFIX = "http://image.tmdb.org/t/p/"; //poster path base path
     final static String POSTER_RESOLUTION = "w185/";                       // resolution of the poster path
 
-    final static String MOVIE_MESSAGE_CODE = "cod";
 
     final static String TRAILER_LIST = "results";       //trailer list
     final static String TRAILER_NAME = "name";          //Name
     final static String TRAILER_KEY = "key";            //Key
     final static String TRAILER_TYPE = "type";          //Type
 
+    final static String REVIEW_LIST = "results";        //review list
+    final static String REVIEW_AUTHOR = "author";       //author
+    final static String REVIEW_CONTENTS = "content";    //contents
+    final static String REVIEW_URL = "url";             //URL
+
+
+    final static String ERROR_MESSAGE_CODE = "cod";
+
     //TODO insert the correct prefix
     final static String TRAILER_PATH_PREFIX = "http://image.tmdb.org/t/p/"; //poster path base path
 
-
-    final static String TRAILER_MESSAGE_CODE = "cod";
 
     public static List<Movie> getSimpleMovieListFromJson(Context context, String movieJsonString) throws JSONException {
 
@@ -51,8 +57,8 @@ public class JsonUtils {
         JSONObject movieListJson = new JSONObject(movieJsonString);
 
         //error handling
-        if (movieListJson.has(MOVIE_MESSAGE_CODE)) {
-            int errorCode = movieListJson.getInt(MOVIE_MESSAGE_CODE);
+        if (movieListJson.has(ERROR_MESSAGE_CODE)) {
+            int errorCode = movieListJson.getInt(ERROR_MESSAGE_CODE);
 
             switch (errorCode) {
                 case HttpURLConnection.HTTP_OK:
@@ -103,8 +109,8 @@ public class JsonUtils {
         JSONObject trailerListJson = new JSONObject(trailerJsonString);
 
         //error handling
-        if (trailerListJson.has(TRAILER_MESSAGE_CODE)) {
-            int errorCode = trailerListJson.getInt(TRAILER_MESSAGE_CODE);
+        if (trailerListJson.has(ERROR_MESSAGE_CODE)) {
+            int errorCode = trailerListJson.getInt(ERROR_MESSAGE_CODE);
 
             switch (errorCode) {
                 case HttpURLConnection.HTTP_OK:
@@ -129,9 +135,7 @@ public class JsonUtils {
             JSONObject singleTrailer = trailerArray.getJSONObject(i);
 
             trailer.setKey(singleTrailer.getString(TRAILER_KEY));
-
             trailer.setName(singleTrailer.getString(TRAILER_NAME));
-
             trailer.setType(singleTrailer.getString(TRAILER_TYPE));
 
             // trailerPath is special because the JSON data ony delivers the suffix
@@ -142,5 +146,48 @@ public class JsonUtils {
         }
 
         return trailerList;
+    }
+
+    public static List<Review> getSimpleReviewListFromJson(Context context, String reviewJsonString) throws JSONException {
+
+        //List that holds the Reviews
+        List<Review> reviewList = null;
+
+        JSONObject reviewListJson = new JSONObject(reviewJsonString);
+
+        //error handling
+        if (reviewListJson.has(ERROR_MESSAGE_CODE)) {
+            int errorCode = reviewListJson.getInt(ERROR_MESSAGE_CODE);
+
+            switch (errorCode) {
+                case HttpURLConnection.HTTP_OK:
+                    break;
+                case HttpURLConnection.HTTP_NOT_FOUND:
+                    //sortOrder invalid
+                    return null;
+                default:
+                    //Server down probably
+                    return null;
+            }
+        }
+
+        reviewList = new ArrayList<Review>();
+
+        JSONArray reviewArray = reviewListJson.getJSONArray(REVIEW_LIST);
+
+        for (int i = 1; i < reviewArray.length(); i++) {
+
+            Review review = new Review();
+
+            JSONObject singleReview = reviewArray.getJSONObject(i);
+
+            review.setAuthor(singleReview.getString(REVIEW_AUTHOR));
+            review.setContents(singleReview.getString(REVIEW_CONTENTS));
+            review.setReviewUrl(singleReview.getString(REVIEW_URL));
+
+            reviewList.add(review);
+        }
+
+        return reviewList;
     }
 }
