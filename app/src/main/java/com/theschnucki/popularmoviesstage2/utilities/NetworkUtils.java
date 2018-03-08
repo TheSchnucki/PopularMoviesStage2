@@ -26,6 +26,7 @@ public class NetworkUtils {
     //other URL format additions
     final static String MEDIUM_PARAM = "movie";
     final static String VIDEO_PARAM = "videos";
+    final static String REVIEW_PARAM = "reviews";
 
     //build the URL to communicate Movies with the server
     public static URL buildMovieUrl(String sortOrder) {
@@ -53,6 +54,27 @@ public class NetworkUtils {
                 .appendPath(MEDIUM_PARAM)
                 .appendPath(String.valueOf(movieId))
                 .appendPath(VIDEO_PARAM)
+                .appendQueryParameter("api_key", API_KEY)
+                .build();
+
+        URL url = null;
+        try {
+            url = new URL(builtUri.toString());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        Log.v(TAG, "Built URI " + url);
+
+        return url;
+    }
+
+    //build the URL to communicate Reviews with he server
+    public static URL buildReviewUrl(int movieId) {
+        Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                .appendPath(MEDIUM_PARAM)
+                .appendPath(String.valueOf(movieId))
+                .appendPath(REVIEW_PARAM)
                 .appendQueryParameter("api_key", API_KEY)
                 .build();
 

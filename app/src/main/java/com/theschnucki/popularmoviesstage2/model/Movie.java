@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 public class Movie implements Parcelable {
 
-    public static final String TAG = Movie.class.getSimpleName();
+    private static final String TAG = Movie.class.getSimpleName();
 
     private String title;
     private int TMDbId;
