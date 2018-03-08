@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -42,7 +43,10 @@ import java.util.List;
 
 public class DetailTabedActivity extends AppCompatActivity {
 
-    public static final String TAG = DetailTabedActivity.class.getSimpleName();
+    private static final String TAG = DetailTabedActivity.class.getSimpleName();
+
+    private static final String BUNDLE_TRAILER_RECYCLER = "detailActivity.TrailerFragment.recycler.layout";
+    private static final String BUNDLE_REVIEW_RECYCLER = "detailActivity.ReviewFragment.recycler.layout";
 
     private static TrailerAdapter mTrailerAdapter;
     private static ReviewAdapter mReviewAdapter;
@@ -197,6 +201,8 @@ public class DetailTabedActivity extends AppCompatActivity {
 
         private RecyclerView mRecyclerView;
 
+        Parcelable savedRecyclerLayout;
+
         public TrailerFragment() {}
 
         public static TrailerFragment newInstance(int sectionNumber) {
@@ -307,6 +313,8 @@ public class DetailTabedActivity extends AppCompatActivity {
 
         private RecyclerView mRecyclerView;
 
+        Parcelable savedRecyclerLayout;
+
         public ReviewFragment() {}
 
         public static ReviewFragment newInstance(int sectionNumber) {
@@ -378,9 +386,7 @@ public class DetailTabedActivity extends AppCompatActivity {
                 //mLoadingIndicator.setVisibility(View.INVISIBLE);
                 if (loadedReviewList != null) {
                     //showMovieDataView();
-
                     mReviewAdapter.setReviewList(loadedReviewList);
-
                 } else {
                     //showErrorMessage();
                 }
@@ -408,8 +414,10 @@ public class DetailTabedActivity extends AppCompatActivity {
                 return DetailsFragment.newInstance(position + 1);
             } else if (position == 1) {
                 return TrailerFragment.newInstance(position + 1);
-            } else {
+            } else if (position == 2){
                 return ReviewFragment.newInstance(position + 1);
+            } else {
+                return PlaceholderFragment.newInstance(position + 1);
             }
         }
 

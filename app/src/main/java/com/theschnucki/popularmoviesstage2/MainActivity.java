@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    private static final String BUNDLE_RECYCLER = "mainActivity.recycler.layout";
+
     private static final String API_KEY = BuildConfig.API_KEY;
     private static final int MOVIE_DELETED_REQUEST = 0;
     private static final int RESULT_DELETION = 0;
@@ -42,7 +45,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
     private ProgressBar mLoadingIndicator;
 
-    private String sortOrder = "popular";
+    Parcelable savedRecyclerLayout;
+
+    private String sortOrder;
+
+    //private String sortOrder = "popular";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +78,20 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
 
         //Once all of the views are set up, load Movie data
         loadMovieData();
+
+        if (savedInstanceState != null) {
+            savedRecyclerLayout = savedInstanceState.getParcelable(BUNDLE_RECYCLER);
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayout);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (savedRecyclerLayout != null){
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayout);
+        }
     }
 
     private void setupSharedPreferences () {
@@ -155,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             if (loadedMovieList != null) {
                 showMovieDataView();
                 mMovieAdapter.setMovieList(loadedMovieList);
+                mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayout);
             } else {
                 showErrorMessage();
             }
@@ -193,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 showMovieDataView();
                 List<Movie> loadFavoriteMovieList = Utils.cursorToMovieList(loadFavoriteMovieCursor);
                 mMovieAdapter.setMovieList(loadFavoriteMovieList);
+                mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerLayout);
             } else {
                 showErrorMessage();
             }
@@ -241,6 +264,13 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         int scalingFactor = 180; //see JsonUtils for resolution of downloaded image
         int noOfColumns = (int) (dpWidth/scalingFactor);
         return noOfColumns;
+    }
+
+    @Override
+    public void onSaveInstanceState (Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        Parcelable mRecyclerViewState = mRecyclerView.getLayoutManager().onSaveInstanceState();
+        savedInstanceState.putParcelable(BUNDLE_RECYCLER, mRecyclerViewState);
     }
 
 }
